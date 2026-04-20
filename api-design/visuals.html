@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated explorer — API design: contracts, compatibility, and limits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main class="explorer-main">
+        <p class="eyebrow">Explorer</p>
+        <h1>Throughput, caching, and request shape</h1>
+        <p class="lead explorer-lead">
+          Four linked views: <strong>token bucket</strong> vs <strong>fixed window</strong> (same offered load story), a <strong>latency blend</strong> that folds in <strong>cache hit/miss</strong> plus <strong>REST 1+N vs one graph-shaped trip</strong>, and <strong>round-trip geometry</strong> on the wire. Numbers are pedagogical, not benchmarks.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">1 · Rate limits: token bucket and fixed window</div>
+          <p class="panel-hint">Compare smooth burst shaping (bucket) with hard counter resets (window). Match the two <strong>Arrival</strong> sliders to put the same offered load on both algorithms. The bucket readout ties <strong>long-run admission throughput</strong> to refill (tokens/s); the fixed-window readout ties it to <strong>limit ÷ window</strong> (req/s).</p>
+          <div class="rate-two-up">
+            <div class="rate-col">
+              <div class="panel-label" style="margin-bottom:12px;font-size:10px;opacity:0.9">Token bucket</div>
+              <div class="control-row"><label>Refill / sec <span id="v-refill">18</span></label><input id="tb-refill" type="range" min="2" max="45" value="18" /></div>
+              <div class="control-row"><label>Capacity <span id="v-cap">40</span></label><input id="tb-cap" type="range" min="5" max="120" value="40" /></div>
+              <div class="control-row"><label>Arrival rate / sec <span id="v-arrival">28</span></label><input id="tb-arrival" type="range" min="1" max="80" value="28" /></div>
+              <canvas id="viz-bucket" class="viz-canvas" width="840" height="220" aria-label="Token bucket visualization"></canvas>
+              <div class="readout" id="readout-bucket"></div>
+            </div>
+            <div class="rate-col">
+              <div class="panel-label" style="margin-bottom:12px;font-size:10px;opacity:0.9">Fixed window</div>
+              <div class="control-row"><label>Window (sec) <span id="v-fw-win">1.0</span></label><input id="fw-window" type="range" min="5" max="45" value="10" step="1" /></div>
+              <div class="control-row"><label>Limit / window <span id="v-fw-limit">24</span></label><input id="fw-limit" type="range" min="4" max="80" value="24" /></div>
+              <div class="control-row"><label>Arrival / sec <span id="v-fw-arrival">28</span></label><input id="fw-arrival" type="range" min="1" max="80" value="28" /></div>
+              <div class="control-row"><label>Boundary burst mix <span id="v-fw-burst">35</span>%</label><input id="fw-burst" type="range" min="0" max="100" value="35" /></div>
+              <canvas id="viz-fixed" class="viz-canvas" width="840" height="240" aria-label="Fixed window rate limit visualization"></canvas>
+              <div class="readout" id="readout-fixed"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">2 · Latency: cache blend + wire shape (REST 1+N vs GraphQL)</div>
+          <p class="panel-hint">
+            Hit rate mixes fast cache paths with slow origin work. Wire shape stretches the <strong>miss</strong> path: REST pays sequential round trips; a single graph-shaped request pays one network hop but heavier resolver work.
+            <strong>Schema shape</strong> (how many round trips and how deep the server walks) is independent of <strong>cache luck</strong>—use the green bar vs the coral/cyan reference rows to separate the two.
+          </p>
+          <div class="control-row"><label>Hit rate <span id="v-hit">72</span>%</label><input id="cache-hit" type="range" min="0" max="100" value="72" /></div>
+          <div class="control-row"><label>Staleness budget (ms) <span id="v-stale">120</span></label><input id="cache-stale" type="range" min="0" max="600" value="120" /></div>
+          <div class="control-row"><label>Related resources (N) <span id="v-n-cache">7</span></label><input id="cache-n" type="range" min="1" max="18" value="7" /></div>
+          <fieldset class="wire-fieldset">
+            <legend class="wire-legend">Cold-path wire shape (when origin runs)</legend>
+            <label class="wire-opt"><input type="radio" name="wire-shape" id="wire-gql" value="gql" checked /> One graph / BFF-shaped trip (1 RTT, resolver cost)</label>
+            <label class="wire-opt"><input type="radio" name="wire-shape" id="wire-rest" value="rest" /> REST 1+N sequential fetches</label>
+          </fieldset>
+          <canvas id="viz-cache" class="viz-canvas" width="840" height="240" aria-label="Cache and wire shape latency visualization"></canvas>
+          <div class="readout" id="readout-cache"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">3 · REST (1 + N) vs GraphQL (1 trip) — round trips</div>
+          <div class="control-row"><label>Related resources (N) <span id="v-n">7</span></label><input id="shape-n" type="range" min="1" max="18" value="7" /></div>
+          <canvas id="viz-shape" class="viz-canvas" width="840" height="220" aria-label="REST versus GraphQL round trip visualization"></canvas>
+          <div class="readout" id="readout-shape"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Production defaults (starting points)</div>
+          <div class="info-cards">
+            <div class="info-card">
+              <h3>Request shape</h3>
+              <p>BFF or server-driven aggregates when you own both ends; persisted queries / cost limits before public GraphQL; measure N+1 in resolvers.</p>
+            </div>
+            <div class="info-card">
+              <h3>Versioning</h3>
+              <p>Additive fields first; explicit deprecation with dates; contract tests on critical consumers.</p>
+            </div>
+            <div class="info-card">
+              <h3>Rate limits</h3>
+              <p>Prefer leaky/token bucket for smoother UX; document fixed-window seams; return <code>Retry-After</code> + quota headers when possible.</p>
+            </div>
+            <div class="info-card">
+              <h3>Caching</h3>
+              <p>Key by tenant/version/locale; TTL + surrogate keys; stale-while-revalidate; never cache unbounded 5xx.</p>
+            </div>
+            <div class="info-card">
+              <h3>Auth &amp; webhooks</h3>
+              <p>Short-lived tokens, rotation, constant-time signature verify, replay windows, idempotent handlers.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+  <script src="visuals.js" defer></script>
+</body>
+</html>

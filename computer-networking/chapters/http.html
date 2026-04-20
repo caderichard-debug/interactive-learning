@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HTTP/2–3 — NET LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · application</p>
+        <h1>HTTP/2 and HTTP/3</h1>
+        <p class="lead">
+          <strong>HTTP/2</strong> removes <em>HTTP-layer</em> head-of-line blocking between streams (no more “request 1 blocks request 2” at the framing layer). Those streams are still serialized into <strong>one TCP connection</strong>, so <em>transport-level</em> HoL remains: one lost segment creates a gap in the shared byte sequence, and TCP cannot hand later bytes to the application until the hole is filled—those later bytes may carry a different stream’s frames.
+          <strong>HTTP/3</strong> over QUIC maps streams to separate QUIC streams with independent ordering and loss recovery, so a loss on stream A does not force the same stall pattern on B and C (you still share congestion control and path limits).
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Head-of-line: where the bottleneck sits</div>
+          <div class="hol-diagram">
+            <div class="hol-card">
+              <h3>HTTP/2 + TCP</h3>
+              <pre>Streams A B C  (HTTP frames interleaved)
+||||||||||||  (one TCP sequence: bytes 1…n)
+     ^ lost segment
+──── block until retransmit fills the hole
+→ multiplexing helps HTTP, not TCP’s HoL</pre>
+            </div>
+            <div class="hol-card">
+              <h3>HTTP/3 + QUIC</h3>
+              <pre>Stream A  ───●── gap ───→  (repair A)
+Stream B  ───────────────→  (keeps moving)
+Stream C  ───────────────→
+→ loss still costs capacity; HoL shape differs</pre>
+            </div>
+          </div>
+          <svg class="hol-svg-compare" viewBox="0 0 520 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <text x="8" y="16" fill="#888888" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10">HTTP/2 + TCP (one byte pipe)</text>
+            <rect x="8" y="24" width="240" height="14" fill="#2a2928" stroke="#444" rx="2"/>
+            <text x="88" y="34" fill="#e7e5e2" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">A</text>
+            <text x="128" y="34" fill="#e7e5e2" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">B</text>
+            <text x="168" y="34" fill="#e7e5e2" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">C</text>
+            <rect x="108" y="26" width="18" height="10" fill="#c75a5a" opacity="0.9"/>
+            <text x="112" y="52" fill="#c75a5a" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">lost TCP seg</text>
+            <text x="8" y="66" fill="#888888" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">→ gap blocks delivery of later bytes (all streams wait)</text>
+            <text x="272" y="16" fill="#888888" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10">HTTP/3 + QUIC (streams)</text>
+            <line x1="272" y1="31" x2="508" y2="31" stroke="#444" stroke-width="1"/>
+            <line x1="272" y1="46" x2="508" y2="46" stroke="#444" stroke-width="1"/>
+            <line x1="272" y1="61" x2="508" y2="61" stroke="#444" stroke-width="1"/>
+            <text x="276" y="36" fill="#5ba3b5" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">A ●··→</text>
+            <text x="276" y="51" fill="#5a9a6e" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">B ─────→</text>
+            <text x="276" y="66" fill="#8b7aa8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">C ─────→</text>
+            <text x="272" y="88" fill="#888888" font-family="JetBrains Mono, ui-monospace, monospace" font-size="8">→ A stalls; B/C can progress (simplified)</text>
+          </svg>
+          <p class="callout-cyan" style="margin-top: 16px; margin-bottom: 0;">
+            Mnemonic: <strong>H2</strong> fixes “six connections” pain; <strong>TCP</strong> can still serialize delivery after loss. <strong>H3</strong> moves byte-stream ownership so stream-level stalls decouple more cleanly—without removing congestion signals or server work.
+          </p>
+          <dl class="hol-dl" style="margin: 20px 0 0; font-size: 14px; color: var(--text-secondary); line-height: 1.55;">
+            <dt style="font-weight: 600; color: var(--text-primary); margin-top: 10px;">HoL at HTTP (framing)</dt>
+            <dd style="margin: 4px 0 0 12px;">Largely gone in both: interleaved streams avoid the old “queue behind response 1” problem.</dd>
+            <dt style="font-weight: 600; color: var(--text-primary); margin-top: 10px;">HoL at TCP (single ordered byte pipe)</dt>
+            <dd style="margin: 4px 0 0 12px;">Still affects <strong>H2</strong>: one gap in the sequence stalls everything after it. Not applicable to QUIC in the same way because delivery order is per-stream.</dd>
+            <dt style="font-weight: 600; color: var(--text-primary); margin-top: 10px;">HoL-shaped stalls under HTTP/3</dt>
+            <dd style="margin: 4px 0 0 12px;">Different profile: shared congestion controller, CPU, and application queues can still serialize work—but the classic “lost TCP segment blocks unrelated streams’ bytes” pattern is what H3/QUIC is designed to reduce.</dd>
+          </dl>
+          <p style="margin: 16px 0 0; font-size: 13px; color: var(--text-muted);">
+            Explorer note (HoL + live loss/throughput): <a href="../visuals.html#explorer-hol" style="color: var(--accent-coral);">animated explorer</a>
+            · <a href="../visuals.html#explorer-tput" style="color: var(--accent-coral);">throughput / retransmit readouts</a>
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">What multiplexing fixes</div>
+          <ul class="tight">
+            <li>Many small assets no longer require six parallel TCP connections to avoid self-HoL.</li>
+            <li>Server push existed in H2 but is rarely the first lever—prioritization and frame scheduling matter more.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">What still hurts</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Application-level queues, database contention, and TLS/crypto still cap QPS. The explorer’s RTT/loss controls are a reminder that transport remains the floor for interactive workloads.
+          </p>
+          <p style="margin: 12px 0 0; font-size: 13px; color: var(--text-muted);">
+            See also: <a href="../visuals.html#explorer-top" style="color: var(--accent-coral);">explorer</a> takeaway on HoL layers.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="dns-tls.html" style="color: var(--accent-coral);">← DNS &amp; TLS</a>
+          &nbsp;·&nbsp;
+          <a href="../index.html" style="color: var(--accent-coral);">Overview →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

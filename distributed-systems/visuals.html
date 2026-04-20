@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Distributed systems explorer</title>
+  <meta name="description" content="Partition vs quorum, a toy leader-term election loop, and a log-append sketch." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 900px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Explorer</p>
+        <h1>Partition, quorum, leader term, and log append</h1>
+        <p class="lead" style="color: var(--text-secondary); font-size: 15px;">
+          Three sketches stack intentionally: <strong>topology vs policy</strong> (partition severity × quorum rule), then <strong>who may lead</strong> (terms and ballots—no network geometry), then <strong>how the log advances</strong> on a single leader view. All are toys—use chapters for vocabulary and failure modes.
+        </p>
+
+        <h2 id="explorer-partition" style="font-size: 17px; font-weight: 700; margin: 28px 0 10px;">1. Partition cut vs quorum threshold</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 14px; line-height: 1.55;">
+          <strong>Two different knobs:</strong> <em>severity</em> moves the cut and changes how many replicas sit on the <strong>majority side</strong> versus the <strong>isolated slice</strong> (topology). The <em>quorum threshold</em> slider does not move the cut—it only changes the fixed rule <code style="font-family:var(--font-mono);font-size:13px">votes needed = ceil(N × threshold)</code> computed on full <strong>N</strong>. The bar under the ring compares <strong>reachable count</strong> to <strong>votes needed</strong> for strict quorum writes.
+        </p>
+        <div class="panel">
+          <div class="panel-label">Controls</div>
+          <div class="control-row"><label>Partition severity <span id="sev">35</span></label><input id="s1" type="range" min="0" max="100" value="35" aria-describedby="readout-partition" /></div>
+          <div class="control-row"><label>Quorum threshold (% of all nodes N) <span id="q">51</span></label><input id="s2" type="range" min="50" max="90" value="51" aria-describedby="readout-partition" /></div>
+          <canvas id="viz-partition" width="840" height="300" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-partition"></div>
+        </div>
+
+        <h2 id="explorer-term" style="font-size: 17px; font-weight: 700; margin: 36px 0 10px;">2. Leader term (election rounds, schematic)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 14px; line-height: 1.55;">
+          This panel is <strong>not</strong> a partition diagram: it only shows <strong>monotonic terms</strong>, <strong>candidate vs follower</strong>, and a <strong>split vote</strong> beat before one replica wins a majority of grants. No log entries—just the “who may propose” gate. Compare to sketch 1, where geometry blocks votes in a different way.
+        </p>
+        <div class="panel">
+          <div class="panel-label">Animation</div>
+          <canvas id="viz-term" width="840" height="168" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-term"></div>
+        </div>
+
+        <h2 id="explorer-log" style="font-size: 17px; font-weight: 700; margin: 36px 0 10px;">3. Log append + majority commit (schematic)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 14px; line-height: 1.55;">
+          Assumes a stable leader term. The leader extends the log with index <strong>4</strong> after prefix <strong>1–3</strong>. Entries in <span style="color:#c9a86c">amber</span> are not yet on a majority; <span style="color:#5a9a6e">green</span> marks the toy “committed” view after three of four replicas hold the new slot (majority of four).
+        </p>
+        <div class="panel">
+          <div class="panel-label">Animation</div>
+          <canvas id="viz-log" width="840" height="240" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-log"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Reading the three sketches</div>
+          <ul class="tight" style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            <li><strong>Partition ≠ quorum:</strong> severity changes the reachable <em>set</em>; the threshold slider changes the <em>rule</em> on <strong>N</strong>. A bad combination blocks strict quorum work even when “many” nodes are alive on the minority side.</li>
+            <li><strong>Term panel:</strong> same quorum math, but the story is <strong>ballots and liveness</strong> (split votes, backoff)—not message routing.</li>
+            <li><strong>Log panel:</strong> append/catch-up and majority commit; omits RPC details, disk sync, and conflicting tails—see <a href="chapters/log-replication.html" style="color: var(--accent-primary);">Log replication</a>. Pair with <a href="chapters/leader-election.html" style="color: var(--accent-primary);">Leader election</a>.</li>
+            <li>Continue with <a href="chapters/partitions.html" style="color: var(--accent-primary);">Partitions</a> for fencing and leases in prose.</li>
+          </ul>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+  <script src="visuals.js" defer></script>
+</body>
+</html>

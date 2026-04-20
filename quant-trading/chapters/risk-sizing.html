@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Risk &amp; sizing — Quant Lab</title>
+  <meta name="description" content="Position sizing intuition: Kelly fractions, drawdowns, and why risk is a process." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · capital preservation</p>
+        <h1>Risk &amp; sizing</h1>
+        <p class="lead">
+          <strong>Edge without sizing is undefined</strong>—the same signal implies different wealth paths at different leverage. This chapter is <strong>intuition only</strong>: Kelly criteria, fractional sizing, drawdown psychology, and why single-number VaR is never enough.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Kelly (cartoon)</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px;">
+            In a simplified binary bet with known win probability <i>p</i> and payoff odds, full Kelly maximizes long-run growth rate but produces <strong>violent path variance</strong>. Practitioners use <strong>fractional Kelly</strong> (e.g. ¼–½) to model parameter error and path risk.
+          </p>
+          <p class="callout-cyan" style="margin: 0;">
+            <strong>Intuition:</strong> if your <i>p</i> and payoff estimates come from the same noisy sample as your signal, “full Kelly” double-counts confidence. <strong>Cartoon:</strong> shrink size until ruin probability under stress scenarios is tolerable—not until a spreadsheet says “optimal.”
+          </p>
+        </div>
+
+        <h2>Drawdowns vs averages</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          A positive mean return with high variance can still spend years underwater (max drawdown). Investors experience <strong>path</strong>, not expectation. <strong>Typical in practice:</strong> cap leverage, diversify <em>hypotheses</em> not just names, and separate <strong>risk budget</strong> (how much heat you allow) from <strong>signal strength</strong>.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">VaR: one brick, not a house</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Value-at-Risk answers “how bad is the <i>q</i>th percentile loss over a horizon?” It is silent on <strong>what happens beyond <i>q</i></strong> (tail dependence, liquidity gaps, gap risk). Pair any VaR number with <strong>stress tests</strong> and <strong>liquidity</strong> analysis—see <a href="costs.html" style="color: var(--accent-primary);">Costs &amp; capacity</a>.
+          </p>
+        </div>
+
+        <h2>Risk as process</h2>
+        <ul class="tight">
+          <li><strong>Pre-trade</strong> — limits, fat-finger checks, max position per name/sector.</li>
+          <li><strong>Live</strong> — real-time exposure vs limit; circuit breakers when model health degrades.</li>
+          <li><strong>Post-trade</strong> — attribution (signal vs costs vs drift), log incidents, revise assumptions.</li>
+        </ul>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="signals.html" style="color: var(--accent-coral);">← Signals &amp; decay</a>
+          <a href="../index.html" style="color: var(--accent-coral);">Overview →</a>
+        </nav>
+
+        <p class="disclaimer" role="note"><strong>Not investment advice.</strong> Sizing rules here are pedagogical, not portfolio construction advice.</p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

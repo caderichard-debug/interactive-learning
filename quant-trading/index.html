@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quant trading — intuition, not alpha</title>
+  <meta name="description" content="Sampling noise, costs, research hygiene, returns, signals, and sizing — interactive educational site." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 860px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Interactive education</p>
+        <h1>Quant trading: models, noise, and costs</h1>
+        <p class="lead">
+          Build a defensible mental model of <strong>what backtests measure</strong>, <strong>why small samples lie</strong>, <strong>how returns behave in time</strong>, and <strong>where execution leaks returns</strong>—without promising edge or selling signals.
+        </p>
+        <p>
+          <a class="btn-primary" href="explore.html">Open the sampling explorer →</a>
+          <a class="btn-ghost" href="#chapter-tour">Chapter tour</a>
+          <a class="btn-ghost" href="#concepts">Concept cards</a>
+        </p>
+
+        <p class="disclaimer" role="note">
+          <strong>Not investment advice.</strong> This site is for learning. Live trading involves loss of capital, regulatory constraints, and tax implications. Any numbers here are pedagogical schematics, not forecasts.
+        </p>
+
+        <h2 id="chapter-tour">Chapter tour</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">
+          Read in order or jump via the sidebar. Each chapter ends with <strong>prev / next</strong> links. The explorer is interactive; other chapters are deep reads with checklists and tables.
+        </p>
+        <ol class="chapter-toc" style="padding: 0; margin: 0 0 32px;">
+          <li>
+            <a href="explore.html"><span class="toc-num">01</span><span>Sampling explorer — Wilson bands on win rates</span></a>
+          </li>
+          <li>
+            <a href="chapters/returns-time-series.html"><span class="toc-num">02</span><span>Returns &amp; series — logs, stylized facts, stationarity humility</span></a>
+          </li>
+          <li>
+            <a href="chapters/costs.html"><span class="toc-num">03</span><span>Costs &amp; capacity — spread, impact, volatility drag</span></a>
+          </li>
+          <li>
+            <a href="chapters/backtest-hygiene.html"><span class="toc-num">04</span><span>Backtest hygiene — leakage, snooping, labels</span></a>
+          </li>
+          <li>
+            <a href="chapters/signals.html"><span class="toc-num">05</span><span>Signals &amp; decay — crowding and shortfall</span></a>
+          </li>
+          <li>
+            <a href="chapters/risk-sizing.html"><span class="toc-num">06</span><span>Risk &amp; sizing — Kelly intuition, VaR limits, process</span></a>
+          </li>
+        </ol>
+
+        <h2 id="concepts">Concept cards</h2>
+        <div class="card-grid">
+          <article class="card">
+            <span class="card-slot a">Slot A</span>
+            <div class="card-body">
+              <h3>Signals live in a noisy channel</h3>
+              <p>
+                A strategy’s <strong>observed</strong> win rate mixes true edge (if any), regime, and sampling luck.
+                <strong>Intuition:</strong> tighten claims only when intervals shrink—see the explorer.
+              </p>
+            </div>
+          </article>
+          <article class="card">
+            <span class="card-slot b">Slot B</span>
+            <div class="card-body">
+              <h3>Backtests estimate the past, not the future</h3>
+              <p>
+                Walk-forward design and purged cross-validation (see López de Prado) reduce <strong>leakage</strong> and <strong>overfitting</strong>—they do not guarantee out-of-sample performance.
+              </p>
+            </div>
+          </article>
+          <article class="card">
+            <span class="card-slot c">Slot C</span>
+            <div class="card-body">
+              <h3>Execution and capacity eat “paper” returns</h3>
+              <p>
+                Slippage, fees, borrow, and market impact move realized P&amp;L. <strong>Typical in practice:</strong> model turnover and liquidity before scaling size.
+              </p>
+            </div>
+          </article>
+          <article class="card">
+            <span class="card-slot a">Slot A</span>
+            <div class="card-body">
+              <h3>Returns are messy time series</h3>
+              <p>
+                Volatility clusters; tails are fat; “i.i.d. Gaussian” is a <strong>cartoon</strong> for intuition, not a license for naive σ-scaling.
+                <strong>Continue:</strong> <a href="chapters/returns-time-series.html" style="color: var(--accent-primary);">Returns &amp; series</a>.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <h2>Scope</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          <strong>In:</strong> sampling intuition for hit rates; return definitions &amp; stylized facts at a qualitative level; explicit cost layers; research hygiene (leakage, labels, multiplicity); signal crowding &amp; decay; sizing and risk <em>process</em> framing.<br /><br />
+          <strong>Out / later:</strong> factor model estimation (Barra-style attribution), stochastic control for execution, options Greeks &amp; vol surface arbitrage, HFT queue dynamics, legal/tax structuring, production MLOps for tick data.
+        </p>
+
+        <section class="email-section" aria-labelledby="email-h">
+          <h2 id="email-h">Occasional updates</h2>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 8px;">
+            Short notes when we add chapters or improve interactives. Unsubscribe anytime; we do not sell addresses.
+          </p>
+          <!-- Replace YOUR_FORMSPREE_ID with your Formspree form id (https://formspree.io) -->
+          <form method="POST" action="https://formspree.io/f/YOUR_FORMSPREE_ID">
+            <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <div class="email-row">
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
+              </div>
+              <button type="submit" class="btn-primary">Subscribe</button>
+            </div>
+          </form>
+        </section>
+      </main>
+
+      <footer style="max-width: 860px; margin: 0 auto; padding: 0 40px 40px; width: 100%;">
+        <p class="footer-muted">
+          Design tokens: <code>../STYLE-GUIDE.md</code>. Pedagogy: <code>../CONTENT-AND-RESEARCH-GUIDE.md</code>. Serve from this folder: <code>python3 -m http.server 3005</code>.
+        </p>
+        <h3 class="eyebrow" style="margin-top: 24px; color: var(--text-muted);">Sources (starting points)</h3>
+        <ul class="sources">
+          <li>López de Prado, <em>Advances in Financial Machine Learning</em> (Wiley, 2018) — labeling, leakage, purged CV.</li>
+          <li>Campbell, Lo, MacKinlay, <em>The Econometrics of Financial Markets</em> (Princeton, 1997) — returns, predictability, stylized facts.</li>
+          <li>Cont, “Empirical properties of asset returns: stylized facts and statistical issues” (2001) — qualitative feature set for time series.</li>
+          <li>Grinold &amp; Kahn, <em>Active Portfolio Management</em> (McGraw-Hill, 1999) — information ratio and implementation shortfall framing.</li>
+          <li>Aronson, <em>Evidence-Based Technical Analysis</em> (Wiley, 2006) — data snooping and statistical rigor in trading research.</li>
+        </ul>
+      </footer>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+</body>
+</html>

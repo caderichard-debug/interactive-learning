@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retention — METRICS LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · cohorts</p>
+        <h1>Retention and churn drag</h1>
+        <p class="lead">
+          <strong>Logo retention</strong> and <strong>revenue retention</strong> can diverge when expansion offsets churn at the account level. Boards care about both: durable usage vs durable dollars.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Cohort hygiene</div>
+          <ul class="tight">
+            <li>Anchor cohorts on a meaningful start event (paid conversion, first value action).</li>
+            <li>Separate <strong>voluntary</strong> vs <strong>involuntary</strong> churn when payment failure dominates.</li>
+            <li>Compare cohorts by <strong>ICP tier</strong>—enterprise curves rarely look like PLG SMB curves.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Churn drag intuition</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Even modest monthly churn compounds into a heavy hole to refill with new bookings. The <a href="../visuals.html#panel-cohort-runway" style="color: var(--accent-coral);">explorer</a> overlays <strong>logo</strong> and <strong>revenue cohort</strong> decay (separate monthly retention sliders), plus a linear cash panel beneath—real curves often show “smile” or “cliff” shapes worth modeling explicitly.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="../visuals.html#panel-cohort-runway" style="color: var(--accent-coral);">Explorer: cohort + cash</a>
+          &nbsp;·&nbsp;
+          <a href="cac-ltv.html" style="color: var(--accent-coral);">← CAC / LTV</a>
+          &nbsp;·&nbsp;
+          <a href="mrr.html" style="color: var(--accent-coral);">MRR composition →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

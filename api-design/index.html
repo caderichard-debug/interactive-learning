@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>API design: contracts, compatibility, and limits</title>
+  <meta name="description" content="Five starter topics on API contracts with animated throughput, cache latency, and production defaults." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 860px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Interactive education</p>
+        <h1>API design: contracts, compatibility, and limits</h1>
+        <p class="lead">Five production topics—request shape, versioning, rate limits, caching, and auth/webhooks—with short chapters for decisions and an animated explorer for intuition.</p>
+        <p>
+          <a class="btn-primary" href="visuals.html">Open animated explorer →</a>
+          <a class="btn-ghost" href="#topics">Topic map</a>
+        </p>
+
+        <h2 id="topics">Topic map</h2>
+        <div class="panel" style="margin-bottom: 24px;">
+          <div class="panel-label">At a glance (starter plan)</div>
+          <ul class="tight" style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.55;">
+            <li><strong>REST vs GraphQL:</strong> over-fetch vs under-fetch, schema evolution, operational complexity.</li>
+            <li><strong>Versioning:</strong> additive change first, deprecation timelines, contract tests for consumers.</li>
+            <li><strong>Rate limits:</strong> burst vs sustained throughput; fairness and retry headers.</li>
+            <li><strong>Caching:</strong> cache key design, invalidation paths, staleness budgets.</li>
+            <li><strong>Auth + webhooks:</strong> token scope, rotation, replay protection, signature verification.</li>
+          </ul>
+        </div>
+        <ol class="chapter-toc" style="padding: 0; margin: 0 0 28px;">
+          <li><a href="visuals.html"><span class="toc-num">Lab</span><span><strong>Animated explorer</strong> — token bucket + fixed window, cache vs wire shape, REST 1+N vs one hop</span></a></li>
+          <li><a href="chapters/rest-graphql.html"><span class="toc-num">01</span><span><strong>REST vs GraphQL</strong> — over/under-fetch, schema evolution, ops complexity</span></a></li>
+          <li><a href="chapters/versioning.html"><span class="toc-num">02</span><span><strong>Versioning</strong> — additive change, deprecation windows, contract tests</span></a></li>
+          <li><a href="chapters/rate-limits.html"><span class="toc-num">03</span><span><strong>Rate limits</strong> — fixed window vs token bucket, fairness, retry headers</span></a></li>
+          <li><a href="chapters/caching.html"><span class="toc-num">04</span><span><strong>Caching</strong> — keys, invalidation, staleness budgets</span></a></li>
+          <li><a href="chapters/auth-webhooks.html"><span class="toc-num">05</span><span><strong>Auth &amp; webhooks</strong> — token scope, rotation, signatures, replay protection</span></a></li>
+        </ol>
+
+        <div class="panel">
+          <div class="panel-label">Why this starter</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">Each topic pairs prose with defaults you can argue from—then validate against your traffic, compliance, and client ecosystem. Visual tokens mirror <code>interactive-educational-platform/STYLE-GUIDE.md</code> in-repo.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+</body>
+</html>

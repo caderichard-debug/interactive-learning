@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Costs &amp; capacity — Quant Lab</title>
+  <meta name="description" content="Commissions, spread, impact, and why paper P&amp;L diverges from realized P&amp;L." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · friction</p>
+        <h1>Costs &amp; capacity</h1>
+        <p class="lead">
+          Paper P&amp;L ignores friction. <strong>Typical in practice:</strong> commissions, bid–ask spread (often proxied as half-spread per crossing), borrow for shorts, taxes, and <strong>market impact</strong>—your order moving the price against you—scale with size and turnover.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Cost stack (first-pass model)</div>
+          <table class="data" aria-label="Cost categories">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>What it captures</th>
+                <th>Blind spot</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Explicit fees</td>
+                <td>Brokerage, exchange, regulatory, borrow fees where applicable.</td>
+                <td>Fee tiers change with volume; read the schedule.</td>
+              </tr>
+              <tr>
+                <td>Spread</td>
+                <td>Crossing the book pays half-spread (long) or earns it (short) depending on aggressor side—sign matters.</td>
+                <td>Spread widens in stress; static bps assumptions lie.</td>
+              </tr>
+              <tr>
+                <td>Impact</td>
+                <td>Temporary + permanent price effect of your flow vs available liquidity.</td>
+                <td>Linear impact laws are <strong>schematics</strong>; real order books are discrete events.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Volatility drag (reminder)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          For multiplicative compounding, large variance lowers the <strong>geometric</strong> growth rate even when the arithmetic mean is positive. <strong>Intuition:</strong> a −50% then +50% round trip loses 25% of capital; costs add insult to injury. Pair this mental model with <a href="returns-time-series.html" style="color: var(--accent-primary);">Returns &amp; series</a>.
+        </p>
+
+        <h2>Capacity curve (qualitative)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          As AUM rises, the same signal may <strong>consume more liquidity per unit time</strong>. The “capacity” where edge disappears is not a constant—it moves with volatility and competitor flow. <strong>Typical in practice:</strong> simulate participation rate caps and venue-specific constraints before marketing capacity to LPs.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Actionable heuristic</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Before scaling leverage, stress-test <strong>net</strong> returns after <em>conservative</em> cost and half-spread assumptions. If your purported edge lives entirely inside one round-trip of the bid–ask, it is not edge <strong>for your trade size and frequency</strong>.
+          </p>
+        </div>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="returns-time-series.html" style="color: var(--accent-coral);">← Returns &amp; series</a>
+          <a href="backtest-hygiene.html" style="color: var(--accent-coral);">Next: Backtest hygiene →</a>
+        </nav>
+
+        <p class="disclaimer" role="note"><strong>Not investment advice.</strong></p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

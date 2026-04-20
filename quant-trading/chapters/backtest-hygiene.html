@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Backtest hygiene — Quant Lab</title>
+  <meta name="description" content="Leakage, multiple testing, labeling, and walk-forward discipline for research." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · research discipline</p>
+        <h1>Backtest hygiene</h1>
+        <p class="lead">
+          A clean backtest separates <strong>research mistakes</strong> from <strong>genuine uncertainty</strong>. Three recurring failure modes: <strong>leakage</strong>, <strong>multiple testing</strong>, and <strong>non-stationarity</strong>. A fourth—<strong>bad labels</strong>—often dominates in ML pipelines.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Checklist (intuition)</div>
+          <ul class="tight">
+            <li><strong>Leakage</strong> — future information in features or labels (e.g. random k-fold without embargo around events). <strong>Typical fix pattern:</strong> purged cross-validation with embargo (López de Prado)—still not a proof of live edge.</li>
+            <li><strong>Snooping</strong> — many strategies tried on the same slice inflate winners. <strong>Intuition:</strong> hold out data you never tune on; report multiplicity; simulate under a null of no edge where feasible.</li>
+            <li><strong>Regimes</strong> — parameters fit to one crisis may fail in the next liquidity regime. Walk-forward is a <strong>schematic</strong> for adaptation, not a guarantee.</li>
+            <li><strong>Labels</strong> — triple-barrier (profit-take, stop-loss, vertical barrier) defines outcome horizons; mis-specified barriers bake fake alpha into supervised models.</li>
+          </ul>
+        </div>
+
+        <h2>When to pause publication</h2>
+        <table class="data" aria-label="Red flags">
+          <thead>
+            <tr>
+              <th>Signal</th>
+              <th>What it might mean</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>In-sample ≫ out-of-sample</td>
+              <td>Overfit, leakage, or regime mismatch—before claiming “robust.”</td>
+            </tr>
+            <tr>
+              <td>Performance jumps when you shuffle folds</td>
+              <td>Split protocol may be leaking overlapping bars or corporate actions.</td>
+            </tr>
+            <tr>
+              <td>Turnover × spread &gt; gross edge</td>
+              <td>Economically zero after costs—revisit <a href="costs.html" style="color: var(--accent-primary);">Costs</a>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Continue</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          Pair with the <a href="../explore.html" style="color: var(--accent-primary);">sampling explorer</a> (noise in hit rates) and <a href="returns-time-series.html" style="color: var(--accent-primary);">Returns &amp; series</a> (stationarity humility).
+        </p>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="costs.html" style="color: var(--accent-coral);">← Costs &amp; capacity</a>
+          <a href="signals.html" style="color: var(--accent-coral);">Next: Signals &amp; decay →</a>
+        </nav>
+
+        <p class="disclaimer" role="note"><strong>Not investment advice.</strong></p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

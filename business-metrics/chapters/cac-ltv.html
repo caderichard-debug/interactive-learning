@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAC / LTV — METRICS LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · unit economics</p>
+        <h1>CAC vs LTV and payback</h1>
+        <p class="lead">
+          <strong>CAC</strong> (customer acquisition cost) is what you spend to win a marginal customer.
+          <strong>LTV</strong> (lifetime value) is the contribution you expect from that customer over their life. Decisions usually hinge on <strong>payback period</strong> and the <strong>margin of safety</strong> if churn is worse than modeled.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Definitions that actually match</div>
+          <ul class="tight">
+            <li>Align CAC window with sales cycle length (blended S&M / new logos in the same period).</li>
+            <li>LTV should use <strong>contribution margin</strong>, not revenue, unless you explicitly mean “gross LTV.”</li>
+            <li>Payback = CAC ÷ monthly contribution; compare to your capital cost and strategic risk appetite.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Sensitivity</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Small changes in <strong>retention</strong> or <strong>expansion NRR</strong> dominate long-horizon LTV. Run scenarios where expansion slows or churn inflects—those stress tests matter more than tweaking ad creative by 5%. The explorer pairs a toy <strong>LTV</strong> (contribution × paying months, undiscounted) with payback and an <strong>LTV:CAC</strong> meter so you can feel the leverage of lifetime assumptions, not only CAC.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="../visuals.html#panel-econ-ltv" style="color: var(--accent-coral);">Explorer: payback + LTV →</a>
+          &nbsp;·&nbsp;
+          <a href="funnel.html" style="color: var(--accent-coral);">← Funnel</a>
+          &nbsp;·&nbsp;
+          <a href="retention.html" style="color: var(--accent-coral);">Retention →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

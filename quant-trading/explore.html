@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explore — sampling &amp; win rates</title>
+  <meta name="description" content="Wilson interval demo: how sample size affects confidence in an observed win rate." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 900px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Primary visualization</p>
+        <h1>Sampling: wins, trials, and the Wilson band</h1>
+        <p class="lead">
+          Drag sliders to change the <strong>observed</strong> number of wins and total trades. The cyan band is an approximate <strong>95% Wilson score interval</strong> for the underlying hit rate.
+          <strong>Schematic:</strong> binary outcomes, stationary i.i.d. intuition only—real strategies are neither binary nor i.i.d.
+        </p>
+
+        <p style="color: var(--text-secondary); font-size: 14px; max-width: 640px;">
+          <strong>Why Wilson?</strong> For proportions, the Wilson interval behaves better than a naive normal approximation near 0 or 1 and with small <i>n</i>. It is still a <strong>teaching</strong> layer on top of a toy model—pair with <a href="chapters/returns-time-series.html" style="color: var(--accent-primary);">Returns &amp; series</a> for continuous-return intuition.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Controls</div>
+
+          <div class="control-row">
+            <label for="trials">
+              <span>Total trades (n)</span>
+              <span class="mono-val" id="trials-out">80</span>
+            </label>
+            <input id="trials" type="range" min="10" max="400" step="1" value="80" />
+          </div>
+
+          <div class="control-row">
+            <label for="wins">
+              <span>Wins (≤ n)</span>
+              <span class="mono-val" id="wins-out">44</span>
+            </label>
+            <input id="wins" type="range" min="0" max="80" step="1" value="44" />
+          </div>
+
+          <div class="panel-label" style="margin-top: 24px">Readout</div>
+          <p class="readout" id="readout"></p>
+
+          <div class="panel-label" style="margin-top: 20px">Interval on 0–100% scale</div>
+          <div class="bar-ci" id="ci-bar" aria-hidden="true">
+            <div class="mid" title="50% reference"></div>
+            <div class="interval"></div>
+          </div>
+          <p style="font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); margin-top: 8px;">
+            Gray line at 50% is a visual reference only (fair-coin style baseline), not a null hypothesis test.
+          </p>
+        </div>
+
+        <h2>Inspect</h2>
+        <ul class="tight">
+          <li><strong>Edge:</strong> push wins toward 0 or n with small n—watch the band swallow “certainty.”</li>
+          <li><strong>Boundary:</strong> at wins = 0 or wins = n, intervals are one-sided in interpretation; still use costs and stationarity checks in real work.</li>
+        </ul>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="index.html" style="color: var(--accent-coral);">← Overview</a>
+          <a href="chapters/returns-time-series.html" style="color: var(--accent-coral);">Next: Returns &amp; series →</a>
+        </nav>
+
+        <p class="disclaimer" role="note">
+          <strong>Not investment advice.</strong> Wilson math here is for teaching visualization, not live risk limits.
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+  <script src="explore.js" defer></script>
+</body>
+</html>

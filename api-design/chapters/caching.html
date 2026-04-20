@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caching — API LAB</title>
+  <meta name="description" content="Cache keys, invalidation, staleness budgets, and CDN-friendly patterns." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Topic 04 · latency</p>
+        <h1>Caching and staleness</h1>
+        <p class="lead">
+          Caches move work from the hot path to a stored answer. The design question is not “if” but <strong>what can be wrong for how long</strong>—your <strong>staleness budget</strong>—and how you purge when reality changes.
+        </p>
+
+        <h2>Keys, TTLs, and purge groups</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Anything that changes semantics belongs in the cache key: tenant, locale, feature flags, and representation version.
+          TTL alone is a blunt instrument; <strong>surrogate keys</strong> (tag-based purge) let you invalidate families of responses when an underlying entity changes—critical for product catalogs and CMS-driven pages.
+        </p>
+
+        <h2>Wire shape interplay</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+          REST-shaped <code>GET</code> traffic is the happy path for shared CDNs. GraphQL and authenticated POSTs often move caching to application or edge rules you control.
+          When you model latency, separate <strong>cache luck</strong> (hit rate) from <strong>origin work</strong> (chatty fetches vs one hop)—the explorer’s panel 2 makes that split explicit; see <a href="rest-graphql.html">REST vs GraphQL</a> for the operational context.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Key design choices</div>
+          <ul class="tight">
+            <li><strong>Key shape:</strong> include versioning, tenant, locale, and anything that changes the semantic response.</li>
+            <li><strong>TTL + max-age:</strong> start conservative; measure hit ratio and origin error budget together.</li>
+            <li><strong>Invalidation:</strong> surrogate keys (Fastly-style) or tag-based purge beat ad-hoc URL lists for grouped content.</li>
+            <li><strong>Conditional requests:</strong> ETag / If-None-Match saves bandwidth when validators are cheap.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Failure modes</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            <strong>Thundering herd</strong> after expiry—use jittered TTLs, stale-while-revalidate, or request coalescing.
+            <strong>Poisoned entries</strong> from error responses—never cache 5xx without tight bounds; consider negative caching only with care.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Production defaults</div>
+          <ul class="tight">
+            <li>Instrument hit ratio, origin latency, and purge success; alert when hit ratio drops without a matching traffic change.</li>
+            <li>Prefer explicit <code>Cache-Control</code> over implicit behavior; document what must never be stored (PII-heavy payloads).</li>
+            <li>Pair with <a href="auth-webhooks.html">Auth &amp; webhooks</a> when signed URLs or tokens participate in cache keys.</li>
+          </ul>
+        </div>
+
+        <p class="chapter-nav">
+          <a href="../index.html">← Overview</a>
+          &nbsp;·&nbsp;
+          <a href="../visuals.html">Explorer: cache blend →</a>
+          &nbsp;·&nbsp;
+          <a href="rate-limits.html">← Rate limits</a>
+          &nbsp;·&nbsp;
+          <a href="auth-webhooks.html">Auth &amp; webhooks →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Returns &amp; time series — Quant Lab</title>
+  <meta name="description" content="Log returns, volatility clustering, and stylized facts before you fit a strategy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · foundations</p>
+        <h1>Returns &amp; time series</h1>
+        <p class="lead">
+          Before you optimize entries and exits, align on <strong>how returns are defined</strong>, what “i.i.d.” pretends to ignore, and which <strong>stylized facts</strong> (Campbell, Lo, MacKinlay; Cont) motivate richer models than coin-flip metaphors.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Simple vs log returns</div>
+          <ul class="def-list">
+            <li>
+              <strong>Simple return</strong> — <span class="mono-val" style="font-size: 12px">(P<sub>t</sub> − P<sub>t−1</sub>) / P<sub>t−1</sub></span>. Compounding multiplies <code>(1+r)</code> terms; not additive across time in levels.
+            </li>
+            <li>
+              <strong>Log return</strong> — <span class="mono-val" style="font-size: 12px">ln(P<sub>t</sub>) − ln(P<sub>t−1</sub>)</span>. Over short horizons, log ≈ simple. <strong>Intuition:</strong> log returns add across consecutive periods <em>if</em> you are willing to treat them as additive (still not i.i.d.).
+            </li>
+          </ul>
+          <p class="callout-cyan" style="margin-top: 16px; margin-bottom: 0;">
+            <strong>Schematic:</strong> annualizing by scaling √<i>h</i> assumes variance scales linearly with horizon—convenient for back-of-envelope risk, wrong when volatility clusters or jumps.
+          </p>
+        </div>
+
+        <h2>Stylized facts (qualitative)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">
+          Empirical return series often show: <strong>no exploitable linear autocorrelation</strong> in many liquid prices (at least after microstructure adjustment), <strong>volatility clustering</strong> (large moves bunch), <strong>fat tails</strong> vs Gaussian, and <strong>leverage effects</strong> (volatility reacts asymmetrically to down moves in equities). Treat these as reasons to be humble about Gaussian backtests—not as timing rules.
+        </p>
+        <table class="data" aria-label="Stylized facts cheat sheet">
+          <thead>
+            <tr>
+              <th>Fact</th>
+              <th>Research takeaway</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Volatility clustering</td>
+              <td>Conditional heteroskedasticity (ARCH/GARCH family) models <em>time-varying</em> variance; constant-σ backtests misstate tail risk.</td>
+            </tr>
+            <tr>
+              <td>Fat tails</td>
+              <td>VaR from Normal underestimates joint crash risk; stress scenarios and tail dependence still matter.</td>
+            </tr>
+            <tr>
+              <td>Microstructure noise</td>
+              <td>Ultra-high-frequency returns mix signal and bid–ask bounce; aggregate to a horizon where noise is tolerable for your question.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Stationarity wishful thinking</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          Most strategy research assumes a <strong>slowly evolving</strong> data-generating process. Structural breaks (regulation, venue rules, macro) violate strict stationarity. <strong>Typical in practice:</strong> rolling windows, regime indicators, and out-of-sample protocols—see <a href="backtest-hygiene.html" style="color: var(--accent-primary);">Backtest hygiene</a>.
+        </p>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="../explore.html" style="color: var(--accent-coral);">← Sampling explorer</a>
+          <a href="costs.html" style="color: var(--accent-coral);">Next: Costs &amp; capacity →</a>
+        </nav>
+
+        <p class="disclaimer" role="note"><strong>Not investment advice.</strong> Academic references are for framing, not live forecasts.</p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log replication — DS Lab</title>
+  <meta name="description" content="Append-only logs, majority commit, and why ordering survives crashes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · durability</p>
+        <h1>Log replication</h1>
+        <p class="lead">
+          Consensus-shaped systems treat the source of truth as an <strong>append-only log</strong>: each slot has an index and payload. The <strong>leader</strong> appends; followers store copies; an entry becomes <strong>committed</strong> once a <strong>quorum</strong> has persisted it—so a single surviving majority can recover the same prefix after a crash or partition heals.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Vocabulary (compressed)</div>
+          <table class="data" aria-label="Log replication terms">
+            <thead>
+              <tr>
+                <th>Term</th>
+                <th>Typical meaning</th>
+                <th>Why it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Log index</td>
+                <td>Position in the replicated sequence (1-based in papers, 0-based in code—watch for off-by-one).</td>
+                <td>Ordering claims reference indices, not wall clocks.</td>
+              </tr>
+              <tr>
+                <td>Match / next index</td>
+                <td>Per-follower pointers describing how much of the leader’s log is known to agree.</td>
+                <td>Drives incremental catch-up and repair after lag or leader change.</td>
+              </tr>
+              <tr>
+                <td>Commit (advance)</td>
+                <td>Leader learns that ≥ majority have appended an entry; commit index moves forward.</td>
+                <td>Application-visible “durability” is gated on commit rules + fsync policies.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Majority is the hinge</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Two successive quorums overlap in at least one node. That overlap is why committed prefixes cannot silently fork in the idealized model—any new leader’s election path intersects someone who saw the prior commit point. Pair with <a href="leader-election.html" style="color: var(--accent-primary);">Leader election</a> for the “who may propose” half of the story.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">After a leader change</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            A new leader may need to <strong>overwrite uncommitted suffixes</strong> on followers so every log matches a single prefix before new appends—Raft’s <strong>AppendEntries</strong> consistency check. What clients observe as “committed” still follows the same majority rule; the explorer animation only shows a happy path with no conflicting tails.
+          </p>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          See the <a href="../visuals.html#explorer-log" style="color: var(--accent-primary);">log append sketch</a> on the <a href="../visuals.html" style="color: var(--accent-primary);">Animated explorer</a> for append-and-catch-up (not a real Raft implementation). <a href="../visuals.html#explorer-term" style="color: var(--accent-primary);">Leader-term panel</a> is only about election rounds.
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="leader-election.html" style="color: var(--accent-coral);">← Leader election</a>
+          <a href="../index.html" style="color: var(--accent-coral);">Overview →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

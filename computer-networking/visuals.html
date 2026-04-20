@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated explorer — Computer networking: latency, loss, and flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main id="explorer-top" style="max-width: 900px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Explorer</p>
+        <h1>Setup latency, packet path, and loss</h1>
+        <p class="lead" style="color: var(--text-secondary); font-size: 15px;">
+          Top: four <strong>setup latency</strong> bars (DNS → TCP → TLS → request/TTFB). The <strong>green TCP bar</strong> is a toy <em>time budget</em>; the row under it is a separate <strong>TCP 3-way</strong> lane (SYN → SYN-ACK → ACK) showing <em>segment order</em>, not duration. Middle: <strong>cwnd</strong> vs time (drops on loss). Bottom: <strong>packet stream</strong>; the numeric <strong>throughput index</strong> and <strong>retransmit session counter</strong> match the panels below the canvas.
+        </p>
+
+        <div class="panel" id="explorer-metrics">
+          <div class="panel-label">Controls</div>
+          <div class="control-row"><label>RTT (ms) <span id="v-rtt">95</span></label><input id="n-rtt" type="range" min="15" max="320" value="95" /></div>
+          <div class="control-row"><label>Loss (%) <span id="v-loss">2</span></label><input id="n-loss" type="range" min="0" max="25" value="2" /></div>
+          <div class="control-row" style="margin-top: 8px;">
+            <button type="button" id="reset-stream-metrics" style="font-family: var(--font-mono); font-size: 12px; padding: 8px 12px; cursor: pointer; border-radius: 8px; border: 1px solid var(--grid-line); background: rgba(0,0,0,0.25); color: var(--text-primary);">
+              Reset retransmit &amp; cwnd counters
+            </button>
+          </div>
+          <canvas id="viz" width="840" height="540" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <p id="explorer-readout-anchor" style="font-size: 12px; color: var(--text-muted); margin: 8px 0 10px; font-family: var(--font-mono);">
+            <strong style="color: var(--text-secondary);">Live metrics</strong> (packet-stream simulation): throughput and retransmit readouts update in the cells below and on the canvas footer.
+          </p>
+          <div class="metric-grid" aria-live="polite" aria-label="Throughput, retransmit, and cwnd from packet stream">
+            <div class="metric-cell" id="explorer-tput">
+              <div class="metric-label">Throughput index</div>
+              <div class="metric-val" id="m-tput">—</div>
+              <div class="metric-foot">Derived from toy cwnd and RTT (unitless index).</div>
+            </div>
+            <div class="metric-cell" id="explorer-retx">
+              <div class="metric-label">Retransmit count (session)</div>
+              <div class="metric-val" id="m-retx">0</div>
+              <div class="metric-foot">Increments when the stream reverses after random loss.</div>
+            </div>
+            <div class="metric-cell" id="explorer-cwnd">
+              <div class="metric-label">cwnd (toy)</div>
+              <div class="metric-val" id="m-cwnd">—</div>
+              <div class="metric-foot">Grows on completed RTTs; drops on loss.</div>
+            </div>
+          </div>
+          <div class="readout" id="readout"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Takeaways</div>
+          <ul class="tight" style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            <li>First meaningful byte is often dominated by <strong>DNS + TCP + TLS</strong>, not JSON parsing.</li>
+            <li>Loss drives retransmits and backoff—throughput collapses faster than intuition suggests on long RTT paths. Use <a href="#explorer-readout-anchor" style="color: var(--accent-coral);">live metrics</a> above for the running counters.</li>
+            <li id="explorer-hol"><strong>H2 vs H3 · where head-of-line lives:</strong> <strong>HTTP/2</strong> removes HTTP-layer HoL between streams, but <strong>TCP</strong> is still one byte sequence—a lost segment delays delivery of <em>all</em> later bytes on that connection, including other streams’ frames (<em>TCP-shaped</em> HoL). <strong>HTTP/3 on QUIC</strong> gives streams independent byte flows and retransmission contexts, so a stall on stream A need not block B/C the same way (you still share congestion control and link capacity). <a href="chapters/http.html" style="color: var(--accent-coral);">Chapter diagram →</a></li>
+          </ul>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+  <script src="visuals.js" defer></script>
+</body>
+</html>

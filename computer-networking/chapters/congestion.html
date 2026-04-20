@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Congestion — NET LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · fairness</p>
+        <h1>Congestion window under loss</h1>
+        <p class="lead">
+          Senders infer network capacity from ACK timing and loss signals. <strong>Loss</strong> often shrinks the congestion window (cwnd); <strong>RTT</strong> caps how fast in-flight data can drain the pipe even when cwnd is large.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">BDP</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Bandwidth-delay product ≈ rate × RTT. To fill a fat long-haul link you need enough bytes in flight—window scaling, buffer sizing, and application parallelism all interact.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Operator hint</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Tail latency spikes often correlate with loss or bufferbloat on a path segment—measure with RTT variance and retransmit counters, not only averages.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Toy: cwnd vs loss</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Real congestion control (Cubic, BBR, …) is stateful and path-specific. The site explorer uses a deliberately simple coupling: raising <strong>loss</strong> causes visible <strong>retransmit events</strong> in the packet stream and drags down a toy <strong>cwnd</strong> trace; completed round trips let it creep up again. Use it to build intuition, not to predict production throughput.
+          </p>
+          <div class="cwnd-toy-static" role="img" aria-label="Schematic: cwnd high, loss event, cwnd drops, then slow recovery">
+            <div class="cwnd-toy-static-cap">Schematic (not to scale)</div>
+            <div class="cwnd-toy-bars">
+              <div class="cwnd-toy-bar" style="height: 88%;" title="cwnd growing"></div>
+              <div class="cwnd-toy-bar" style="height: 92%;" title="cwnd near max"></div>
+              <div class="cwnd-toy-bar cwnd-toy-loss" style="height: 36%;" title="loss detected — multiplicative decrease"></div>
+              <div class="cwnd-toy-bar" style="height: 44%;" title="slow start / probe"></div>
+              <div class="cwnd-toy-bar" style="height: 62%;" title="additive increase"></div>
+            </div>
+            <div class="cwnd-toy-labels">
+              <span>ACKs</span>
+              <span class="cwnd-toy-x">loss</span>
+              <span>recover</span>
+            </div>
+          </div>
+          <p style="margin: 14px 0 0; font-size: 13px;">
+            <a href="../visuals.html#explorer-cwnd" style="color: var(--accent-coral);">cwnd strip</a>
+            · <a href="../visuals.html#explorer-tput" style="color: var(--accent-coral);">throughput index</a>
+            · <a href="../visuals.html#explorer-retx" style="color: var(--accent-coral);">retransmit session count</a>
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="handshake.html" style="color: var(--accent-coral);">← Handshake</a>
+          &nbsp;·&nbsp;
+          <a href="dns-tls.html" style="color: var(--accent-coral);">DNS &amp; TLS →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

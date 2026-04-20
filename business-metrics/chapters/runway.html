@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Runway — METRICS LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · risk</p>
+        <h1>Burn and runway</h1>
+        <p class="lead">
+          <strong>Runway</strong> is how long you can operate at a planned burn before cash runs out. The useful question is not the headline months figure but <strong>which bets you can fund</strong> before the next financing or breakeven milestone.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Stress dimensions</div>
+          <ul class="tight">
+            <li><strong>Hiring cadence</strong> and lag to productivity.</li>
+            <li><strong>Working capital</strong> and collections if you sell annual contracts.</li>
+            <li><strong>Scenario bands</strong> on revenue (slippage) and cost (infra + support load).</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Operator default</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            Maintain a rolling 13-week cash view and tie large commits to explicit revenue catalysts. The <a href="../visuals.html#panel-cohort-runway" style="color: var(--accent-coral);">explorer</a> layers a simple month-by-month cash balance (no inflows) so you can see when linear burn intersects zero—intuition only, not a forecast.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="../visuals.html#panel-cohort-runway" style="color: var(--accent-coral);">Explorer: cohort + forward cash →</a>
+          &nbsp;·&nbsp;
+          <a href="mrr.html" style="color: var(--accent-coral);">← MRR composition</a>
+          &nbsp;·&nbsp;
+          <a href="../index.html" style="color: var(--accent-coral);">Overview →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

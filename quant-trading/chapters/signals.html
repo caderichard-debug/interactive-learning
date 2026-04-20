@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Signals &amp; decay — Quant Lab</title>
+  <meta name="description" content="Signals, factor crowding, alpha decay, and implementation shortfall." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · edge as inventory</p>
+        <h1>Signals &amp; alpha decay</h1>
+        <p class="lead">
+          A <strong>signal</strong> is a rule mapping data to positions (or weights). <strong>Alpha decay</strong> describes how predictive power weakens as others trade the same idea, as capacity fills, or as microstructure shifts. <strong>Implementation shortfall</strong> is what you hoped to earn minus what you keep after costs and delays.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Concept spine</div>
+          <ul class="tight">
+            <li><strong>Orthogonality</strong> — crowded factors move together; diversifying across tickers in the same factor bet is not diversifying hypotheses.</li>
+            <li><strong>Half-life</strong> — <strong>Cartoon:</strong> treat edge like exponential decay for planning conversations, not physics.</li>
+            <li><strong>Signal-to-noise</strong> — in liquid markets, many apparent patterns are economically small vs friction; combine with <a href="../explore.html" style="color: var(--accent-primary);">sampling</a> and <a href="costs.html" style="color: var(--accent-primary);">costs</a>.</li>
+          </ul>
+        </div>
+
+        <h2>Factor crowding (qualitative)</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          When many funds run similar “value” or “momentum” definitions, <strong>coordinated unwinds</strong> can deepen drawdowns beyond what a Gaussian covariance matrix suggests. <strong>Intuition:</strong> monitor <em>who else</em> is paid on the same anomaly, not only your in-sample Sharpe.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Research hygiene tie-in</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            If you mine hundreds of signals, winners will correlate with <strong>data snooping bias</strong>. Pre-register primary hypotheses where possible; disclose search space size; use <a href="backtest-hygiene.html" style="color: var(--accent-primary);">purged CV / embargo splits</a> when labels overlap in time.
+          </p>
+        </div>
+
+        <h2>Out of scope here</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          Alternative data licensing, order-book alpha, and execution algorithms—defer to specialist texts and compliance review. For capital preservation framing, continue to <a href="risk-sizing.html" style="color: var(--accent-primary);">Risk &amp; sizing</a>.
+        </p>
+
+        <nav style="display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid-line); font-size: 14px;">
+          <a href="backtest-hygiene.html" style="color: var(--accent-coral);">← Backtest hygiene</a>
+          <a href="risk-sizing.html" style="color: var(--accent-coral);">Next: Risk &amp; sizing →</a>
+        </nav>
+
+        <p class="disclaimer" role="note"><strong>Not investment advice.</strong></p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

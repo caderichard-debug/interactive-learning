@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAP &amp; trade-offs — DS Lab</title>
+  <meta name="description" content="Consistency, availability, partition tolerance — what the theorem does and does not say." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · trade-offs</p>
+        <h1>CAP &amp; trade-offs</h1>
+        <p class="lead">
+          The CAP framing asks what your system does when a <strong>network partition</strong> prevents some nodes from talking. You cannot guarantee <strong>strong linear consistency</strong> for all operations <em>and</em> <strong>full availability</strong> for every request pattern simultaneously in the classic model—something has to give for the affected scope.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Three letters (compressed)</div>
+          <table class="data" aria-label="CAP terms">
+            <thead>
+              <tr>
+                <th>Letter</th>
+                <th>Typical meaning in teaching</th>
+                <th>Reality check</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>C</td>
+                <td>All nodes agree on what a read returns relative to writes (strong forms = linearizability).</td>
+                <td>Products expose tiers: session, causal, “read your writes,” etc.</td>
+              </tr>
+              <tr>
+                <td>A</td>
+                <td>Every request eventually receives a non-error response (liveness for that definition).</td>
+                <td>Degraded modes, shedding load, or partial outages reinterpret “available.”</td>
+              </tr>
+              <tr>
+                <td>P</td>
+                <td>The system keeps progressing when messages are lost/delayed arbitrarily between groups.</td>
+                <td>Partitions happen; “P” is less a knob than an admission of the real world.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          <strong>Intuition:</strong> during a split, if two sides both accept conflicting writes without coordination, you risk divergent histories. If one side refuses writes to stay consistent, you sacrificed availability for those operations. Most production systems choose <strong>nuanced</strong> policies per data type and per region.
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="../index.html" style="color: var(--accent-coral);">← Overview</a>
+          <a href="timeouts.html" style="color: var(--accent-coral);">Next: Timeouts &amp; retries →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

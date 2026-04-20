@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auth &amp; webhooks — API LAB</title>
+  <meta name="description" content="Token scope, rotation, webhook signatures, replay windows, and idempotent consumers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Topic 05 · trust boundaries</p>
+        <h1>Auth and webhooks</h1>
+        <p class="lead">
+          Public APIs and inbound webhooks share a theme: <strong>prove caller identity</strong>, <strong>scope power narrowly</strong>, and <strong>assume duplicates</strong> will arrive.
+        </p>
+
+        <h2>Tokens for outward APIs</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Short-lived access tokens limit blast radius. Refresh flows should rotate refresh tokens and detect reuse, which often indicates leakage.
+          Encode <strong>audience</strong> and <strong>scopes</strong> explicitly so a token minted for tooling cannot be replayed against customer data paths by accident.
+        </p>
+
+        <h2>Webhooks as untrusted input</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+          Treat payloads like any user input: validate shape, verify signatures with constant-time compares, and reject stale timestamps outside a tight replay window.
+          Your handler should be idempotent on a stable event identifier so at-least-once delivery does not create duplicate side effects.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Tokens (OAuth-style APIs)</div>
+          <ul class="tight">
+            <li>Prefer <strong>short-lived access tokens</strong> + refresh with rotation and reuse detection.</li>
+            <li>Encode <strong>audience</strong> and <strong>scopes</strong> explicitly; reject cross-service token confusion.</li>
+            <li>Log <strong>jti</strong> or token fingerprint hashes—not raw secrets—for incident response.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Webhooks</div>
+          <ul class="tight">
+            <li><strong>HMAC signatures</strong> over body + timestamp; verify with constant-time comparison.</li>
+            <li><strong>Replay window:</strong> reject timestamps older than a few minutes; use monotonic nonces when the vendor supports them.</li>
+            <li><strong>Idempotency keys</strong> on your side: same event ID → same outcome, safe under at-least-once delivery.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Checklist before go-live</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            mTLS or signed URLs where appropriate · rotate signing secrets · bounded retry backoff on your dispatcher · DLQ for poison messages · alert on signature failure spikes · document how <a href="caching.html">cache keys</a> incorporate auth state so you never serve one tenant’s data to another
+          </p>
+        </div>
+
+        <p class="chapter-nav">
+          <a href="../index.html">← Overview</a>
+          &nbsp;·&nbsp;
+          <a href="../visuals.html">Animated explorer</a>
+          &nbsp;·&nbsp;
+          <a href="rate-limits.html">Rate limits</a>
+          &nbsp;·&nbsp;
+          <a href="caching.html">← Caching</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

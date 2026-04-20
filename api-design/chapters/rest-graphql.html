@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>REST vs GraphQL — API LAB</title>
+  <meta name="description" content="Over-fetch, under-fetch, schema evolution, and operational trade-offs between REST and GraphQL." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Topic 01 · request shape</p>
+        <h1>REST vs GraphQL</h1>
+        <p class="lead">
+          <strong>REST</strong> maps resources to URLs and verbs; clients stitch multiple responses for nested screens.
+          <strong>GraphQL</strong> exposes one typed graph: clients declare fields, servers resolve a tree—often in one HTTP round trip.
+        </p>
+
+        <h2>Payload fit and chatty UIs</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          REST can over-fetch per resource while still under-delivering for a screen that needs a graph of related entities—hence the classic <strong>1 + N</strong> pattern when clients walk links.
+          GraphQL can target the screen shape, but under-modeled graphs or permissive schemas invite huge queries unless you enforce budgets.
+        </p>
+
+        <h2>Caching and intermediaries</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Cache-friendly <code>GET</code>s with stable URLs align with shared CDNs. Typical GraphQL transports are harder to cache on shared edges; teams lean on persisted queries, private edge rules, or normalized client caches.
+          Pair this topic with <a href="caching.html">Caching</a> when you design TTLs and purge paths.
+        </p>
+
+        <h2>Evolution and operations</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+          REST evolution often means additive JSON fields or versioned paths. GraphQL evolution is schema-first: deprecations, field analytics, and breaking-change discipline in a registry.
+          Pair breaking-change policy with explicit compatibility windows—see <a href="versioning.html">Versioning</a>.
+          Operationally, GraphQL needs resolver-level tracing, depth and complexity limits, and timeouts—cost controls are not optional on the public internet.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Trade-offs (compressed)</div>
+          <table class="data" aria-label="REST vs GraphQL">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>REST</th>
+                <th>GraphQL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Payload fit</td>
+                <td>Risk of over-fetch per resource; chatty when the UI needs many related entities.</td>
+                <td>Field selection reduces over-fetch; risk of under-modeled graphs and huge queries.</td>
+              </tr>
+              <tr>
+                <td>Caching</td>
+                <td>HTTP caches and CDNs align naturally with URL-addressed GETs.</td>
+                <td>POST-shaped endpoints complicate shared caches; rely on persisted queries, APQ, or private edge rules.</td>
+              </tr>
+              <tr>
+                <td>Evolution</td>
+                <td>Version in path or header; additive JSON fields are common.</td>
+                <td>Schema deprecation, @deprecated, and breaking changes need registry discipline.</td>
+              </tr>
+              <tr>
+                <td>Ops</td>
+                <td>Predictable per-route capacity; simpler mental model for many teams.</td>
+                <td>Needs query cost analysis, timeouts, depth limits, and resolver-level observability.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Practical defaults</div>
+          <ul class="tight">
+            <li>Prefer <strong>BFFs</strong> or server-driven aggregates when the client is owned by the same team as the API.</li>
+            <li>Use <strong>persisted queries</strong> or strict complexity budgets before exposing arbitrary GraphQL on the public internet.</li>
+            <li>Instrument <strong>N+1 resolver patterns</strong>; batch loaders are table stakes at scale.</li>
+            <li>Document <strong>rate limits</strong> per operation class; pair with the <a href="rate-limits.html">Rate limits</a> chapter when you expose graphs to third parties.</li>
+          </ul>
+        </div>
+
+        <div class="callout-cyan">
+          Explorer tie-in: panel 2 models how <strong>REST 1+N</strong> stretches cold-path latency versus a single graph-shaped hop for the same related resource count <strong>N</strong>.
+        </div>
+
+        <p class="chapter-nav">
+          <a href="../index.html">← Overview</a>
+          &nbsp;·&nbsp;
+          <a href="../visuals.html">Animated explorer →</a>
+          &nbsp;·&nbsp;
+          <a href="versioning.html">Versioning →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Distributed systems — clocks, faults, and agreement</title>
+  <meta name="description" content="CAP, timeouts, partitions, eventual consistency, consensus, leader election, and log replication — intuition for builders." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 860px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Interactive education</p>
+        <h1>Distributed systems: partial failure is normal</h1>
+        <p class="lead">
+          Build a working mental model of <strong>why latency and clocks lie</strong>, <strong>what happens when the network splits</strong>, <strong>how availability and consistency trade off under partitions</strong>, and <strong>why consensus protocols exist</strong>—without pretending a single diagram captures production.
+        </p>
+        <p>
+          <a class="btn-primary" href="visuals.html">Open animated explorer →</a>
+          <a class="btn-ghost" href="#chapter-tour">Chapter tour</a>
+          <a class="btn-ghost" href="#concepts">Concept cards</a>
+        </p>
+
+        <p class="disclaimer" role="note">
+          <strong>Pedagogy, not certification.</strong> Real systems mix vendors, kernels, clocks, and operators. Use this site to sharpen vocabulary and failure-mode thinking; verify assumptions against your stack and SLOs.
+        </p>
+
+        <h2 id="chapter-tour">Chapter tour</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;">
+          Read in order or jump via the sidebar. Each chapter ends with <strong>prev / next</strong> links.
+        </p>
+        <ol class="chapter-toc" style="padding: 0; margin: 0 0 32px;">
+          <li>
+            <a href="chapters/cap.html"><span class="toc-num">01</span><span>CAP &amp; trade-offs — partition lens on consistency and availability</span></a>
+          </li>
+          <li>
+            <a href="chapters/timeouts.html"><span class="toc-num">02</span><span>Timeouts &amp; retries — latency as ambiguity, retry storms, idempotency</span></a>
+          </li>
+          <li>
+            <a href="chapters/partitions.html"><span class="toc-num">03</span><span>Partitions — split brain, quorums, fencing tokens (intro)</span></a>
+          </li>
+          <li>
+            <a href="chapters/eventual-consistency.html"><span class="toc-num">04</span><span>Eventual consistency — convergence, read paths, conflict handling</span></a>
+          </li>
+          <li>
+            <a href="chapters/consensus-intro.html"><span class="toc-num">05</span><span>Consensus sketch — Raft/Paxos framing, quorum intersection</span></a>
+          </li>
+          <li>
+            <a href="chapters/leader-election.html"><span class="toc-num">06</span><span>Leader election — terms, ballots, split votes</span></a>
+          </li>
+          <li>
+            <a href="chapters/log-replication.html"><span class="toc-num">07</span><span>Log replication — append-only log, majority commit</span></a>
+          </li>
+        </ol>
+
+        <h2 id="topic-map">Topic coverage</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px;">
+          Each row ties a <strong>curriculum topic</strong> (see <code style="font-family:var(--font-mono);font-size:13px">distributed-systems/LLM_CONTEXT.md</code>) to the chapter(s) that carry it. The <a href="visuals.html" style="color: var(--accent-primary);">Animated explorer</a> has three canvases: partition vs quorum rule, leader-term election rounds, and log append with majority commit.
+        </p>
+        <div class="panel">
+          <div class="panel-label">LLM_CONTEXT ↔ chapters</div>
+          <table class="data" aria-label="Topic to chapter map">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Where it lives</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Consensus (Raft / Paxos framing)</td>
+                <td><a href="chapters/consensus-intro.html" style="color: var(--accent-primary);">Consensus sketch</a> · <a href="visuals.html" style="color: var(--accent-primary);">Explorer</a> (term + log)</td>
+              </tr>
+              <tr>
+                <td>CAP theorem &amp; trade-offs</td>
+                <td><a href="chapters/cap.html" style="color: var(--accent-primary);">CAP &amp; trade-offs</a></td>
+              </tr>
+              <tr>
+                <td>Leader election</td>
+                <td><a href="chapters/leader-election.html" style="color: var(--accent-primary);">Leader election</a> · <a href="visuals.html#explorer-term" style="color: var(--accent-primary);">Explorer</a> (term sketch)</td>
+              </tr>
+              <tr>
+                <td>Log replication</td>
+                <td><a href="chapters/log-replication.html" style="color: var(--accent-primary);">Log replication</a> · <a href="visuals.html#explorer-log" style="color: var(--accent-primary);">Explorer</a> (append sketch)</td>
+              </tr>
+              <tr>
+                <td>Network partitions</td>
+                <td><a href="chapters/partitions.html" style="color: var(--accent-primary);">Partitions</a> · <a href="chapters/timeouts.html" style="color: var(--accent-primary);">Timeouts &amp; retries</a> · <a href="visuals.html#explorer-partition" style="color: var(--accent-primary);">Explorer</a> (cut vs quorum)</td>
+              </tr>
+              <tr>
+                <td>Eventual consistency</td>
+                <td><a href="chapters/eventual-consistency.html" style="color: var(--accent-primary);">Eventual consistency</a> (contrast with <a href="chapters/cap.html" style="color: var(--accent-primary);">strong expectations</a>)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="concepts">Concept cards</h2>
+        <div class="card-grid">
+          <article class="card">
+            <span class="card-slot a">Slot A</span>
+            <div class="card-body">
+              <h3>Partial failure dominates</h3>
+              <p>
+                A message may be <strong>slow</strong>, <strong>lost</strong>, or <strong>duplicated</strong>. You rarely observe “true” state across nodes—only timeouts and replies that must be interpreted under uncertainty.
+              </p>
+            </div>
+          </article>
+          <article class="card">
+            <span class="card-slot b">Slot B</span>
+            <div class="card-body">
+              <h3>CAP is a lens, not a scorecard</h3>
+              <p>
+                Under <strong>partition</strong>, a system must choose how it behaves toward consistency vs availability for affected operations. Real products add nuance (latency, linearizability tiers, multi-dc rules).
+              </p>
+            </div>
+          </article>
+          <article class="card">
+            <span class="card-slot c">Slot C</span>
+            <div class="card-body">
+              <h3>Consensus buys agreement, not speed</h3>
+              <p>
+                Protocols like Raft elect a leader and replicate a log so committed decisions survive faults—at the cost of round-trips and careful failure handling. <strong>Continue:</strong> <a href="chapters/consensus-intro.html" style="color: var(--accent-primary);">Consensus sketch</a>.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <h2>Scope</h2>
+        <p style="color: var(--text-secondary); font-size: 14px;">
+          <strong>In:</strong> first-pass CAP framing; timeout/retry pitfalls; partition stories; eventual consistency vocabulary; consensus motivation plus dedicated passes on leader election and log replication.<br /><br />
+          <strong>Out / later:</strong> formal linearizability proofs, full Raft/Paxos derivations, Byzantine models, production consensus tuning, service mesh control planes.
+        </p>
+      </main>
+
+      <footer style="max-width: 860px; margin: 0 auto; padding: 0 40px 40px; width: 100%;">
+        <p class="footer-muted">
+          Design tokens: <code>../STYLE-GUIDE.md</code>. Serve from this folder: <code>python3 -m http.server 3006</code> or <code>./serve.sh</code>.
+        </p>
+      </footer>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+</body>
+</html>

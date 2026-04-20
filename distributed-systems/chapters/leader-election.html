@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leader election — DS Lab</title>
+  <meta name="description" content="Terms, ballots, split votes, and why a stable writer needs more than a ping." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · leadership</p>
+        <h1>Leader election</h1>
+        <p class="lead">
+          A <strong>leader</strong> is a role, not magic: one replica is designated to propose ordering for a window of time so clients have a clear place to send work. <strong>Election</strong> picks that replica using ballots or terms; <strong>safety</strong> requires that at most one leader’s proposals can commit per term—otherwise you are back to split brain.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">What an election is trying to fix</div>
+          <table class="data" aria-label="Leader election ideas">
+            <thead>
+              <tr>
+                <th>Idea</th>
+                <th>Teaching role</th>
+                <th>Reality check</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Term / epoch / ballot number</td>
+                <td>Monotonic clock for “which era of configuration are we in?” Stale leaders lose to higher terms.</td>
+                <td>Must be persisted before claiming leadership; ties need deterministic rules.</td>
+              </tr>
+              <tr>
+                <td>Quorum of votes</td>
+                <td>A candidate must hear from a majority before becoming leader—intersection with prior committed state.</td>
+                <td>Same majority math as <a href="partitions.html" style="color: var(--accent-primary);">partition</a> sketches; minority partitions cannot elect safely for strict models.</td>
+              </tr>
+              <tr>
+                <td>Split votes</td>
+                <td>No candidate reaches a majority in one round; protocols randomize backoff and retry.</td>
+                <td>Liveness tuning matters; storms of elections can hurt tail latency.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Election alone is not enough</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Winning an election grants <strong>permission to try</strong> to commit new state, not a blank check. Durable <a href="log-replication.html" style="color: var(--accent-primary);">log replication</a> and fencing (see <a href="partitions.html" style="color: var(--accent-primary);">Partitions</a>) keep storage and followers aligned when messages reorder or duplicate.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Raft-shaped vocabulary (names only)</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Candidates bump a persisted <strong>term</strong>, send <strong>RequestVote</strong> RPCs, and become leader only after a <strong>majority</strong> of grants. Followers reject stale terms. That majority is evaluated against the <em>full</em> cluster size—so a candidate on the <a href="partitions.html" style="color: var(--accent-primary);">minority side of a partition</a> cannot collect enough votes for safe leadership in the strict model, even if local processes keep running.
+          </p>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          Term sketch (split votes → leader): <a href="../visuals.html#explorer-term" style="color: var(--accent-primary);">Animated explorer</a> · append flow: <a href="../visuals.html#explorer-log" style="color: var(--accent-primary);">log panel</a> · umbrella framing: <a href="consensus-intro.html" style="color: var(--accent-primary);">Consensus sketch</a>.
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="consensus-intro.html" style="color: var(--accent-coral);">← Consensus sketch</a>
+          <a href="log-replication.html" style="color: var(--accent-coral);">Next: Log replication →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

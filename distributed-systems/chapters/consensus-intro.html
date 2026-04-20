@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Consensus sketch — DS Lab</title>
+  <meta name="description" content="Why replicated logs and leader election show up everywhere." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · agreement</p>
+        <h1>Consensus sketch</h1>
+        <p class="lead">
+          Many control planes need a <strong>single ordered story</strong> of configuration or commands across failures. <strong>Consensus</strong> protocols (Raft is the common teaching vehicle; Paxos is the classic reference) elect a leader, replicate a log, and commit entries so a majority has agreed before you act on critical transitions.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Why it costs round-trips</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Safety comes from <strong>quorum intersection</strong> between successive leader eras and log positions. That intersection logic is what blocks arbitrary duplication of committed decisions—at the price of latency, careful disk sync policies, and operational tooling for membership changes.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Same story, three lenses</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px; line-height: 1.6;">
+            <strong>Partition</strong> (who can talk to whom) is not the same object as <strong>quorum</strong> (how many votes the protocol requires on the full membership). The <a href="../visuals.html#explorer-partition" style="color: var(--accent-primary);">first explorer sketch</a> separates partition severity from the quorum-threshold slider on purpose; <a href="../visuals.html#explorer-term" style="color: var(--accent-primary);">sketch 2</a> is ballot/term only; <a href="../visuals.html#explorer-log" style="color: var(--accent-primary);">sketch 3</a> is append and commit. <strong>Election</strong> picks who may propose for a term; <strong>replication</strong> decides which log prefix is durable before you treat it as committed.
+          </p>
+          <table class="data" aria-label="Consensus topics on this site">
+            <thead>
+              <tr>
+                <th>LLM_CONTEXT topic</th>
+                <th>Chapter</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CAP &amp; trade-offs</td>
+                <td><a href="cap.html" style="color: var(--accent-primary);">CAP &amp; trade-offs</a></td>
+              </tr>
+              <tr>
+                <td>Partitions · timeouts</td>
+                <td><a href="partitions.html" style="color: var(--accent-primary);">Partitions</a> · <a href="timeouts.html" style="color: var(--accent-primary);">Timeouts &amp; retries</a></td>
+              </tr>
+              <tr>
+                <td>Eventual consistency</td>
+                <td><a href="eventual-consistency.html" style="color: var(--accent-primary);">Eventual consistency</a></td>
+              </tr>
+              <tr>
+                <td>Leader election · log replication</td>
+                <td><a href="leader-election.html" style="color: var(--accent-primary);">Leader election</a> · <a href="log-replication.html" style="color: var(--accent-primary);">Log replication</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 style="font-size: 18px; font-weight: 700; margin: 32px 0 12px;">Raft / Paxos-shaped outline</h2>
+        <div class="panel">
+          <div class="panel-label">Two coupled mechanisms</div>
+          <table class="data" aria-label="Consensus mechanisms">
+            <thead>
+              <tr>
+                <th>Mechanism</th>
+                <th>Question it answers</th>
+                <th>On this site</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Leader election</td>
+                <td>Who is allowed to extend the log for this term?</td>
+                <td><a href="leader-election.html" style="color: var(--accent-primary);">Leader election</a></td>
+              </tr>
+              <tr>
+                <td>Log replication</td>
+                <td>Which prefix of commands is durable before we expose them as committed?</td>
+                <td><a href="log-replication.html" style="color: var(--accent-primary);">Log replication</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          <strong>Paxos</strong> is the classic reference for agreement under crash failures; <strong>Raft</strong> reorganizes the same ingredients for teachability (strong leader, explicit log). This lab stays informal—verify invariants against papers and your runtime.
+        </p>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 16px;">
+          This chapter is intentionally shallow. For depth, pair with primary literature (Lamport; Ongaro &amp; Ousterhout on Raft) and your vendor’s failure-mode docs. Motion: <a href="../visuals.html" style="color: var(--accent-primary);">Animated explorer</a> (three sketches).
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="eventual-consistency.html" style="color: var(--accent-coral);">← Eventual consistency</a>
+          <a href="leader-election.html" style="color: var(--accent-coral);">Next: Leader election →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

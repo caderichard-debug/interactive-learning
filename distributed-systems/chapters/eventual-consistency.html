@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eventual consistency — DS Lab</title>
+  <meta name="description" content="Convergence, read models, and handling conflicts at a glance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · convergence</p>
+        <h1>Eventual consistency</h1>
+        <p class="lead">
+          If replicas accept writes while disconnected, histories <strong>diverge</strong>. <strong>Eventual consistency</strong> means that if updates stop and enough connectivity exists, replicas tend toward the same state—often via anti-entropy, merge rules, or CRDT-shaped data structures.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">What readers might see</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            <strong>Stale reads</strong> are common before convergence. Products advertise guarantees like “read your writes” or monotonic reads to narrow the surprise window. <strong>Conflict resolution</strong> (last-write-wins, application merge, CRDTs) is part of the data model, not an afterthought.
+          </p>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          Contrast with <a href="cap.html" style="color: var(--accent-primary);">strong consistency</a> expectations under partition—different problem, different ops cost.
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="partitions.html" style="color: var(--accent-coral);">← Partitions</a>
+          <a href="consensus-intro.html" style="color: var(--accent-coral);">Next: Consensus sketch →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

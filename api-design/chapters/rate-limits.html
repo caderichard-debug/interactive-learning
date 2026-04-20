@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rate limits — API LAB</title>
+  <meta name="description" content="Fixed window vs token bucket, fairness, Retry-After, and client backoff." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Topic 03 · fairness</p>
+        <h1>Rate limiting algorithms</h1>
+        <p class="lead">
+          Limits protect origin capacity and isolate noisy neighbors. <strong>Fixed windows</strong> are simple but admit burst seams; <strong>token buckets</strong> and <strong>leaky buckets</strong> shape sustained vs burst traffic more smoothly.
+        </p>
+
+        <h2>Side-by-side intuition</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          <strong>Fixed window</strong> counters reset on a clock tick. Two heavy bursts that straddle the boundary can temporarily consume <em>twice</em> the nominal per-window budget—fair for some batch jobs, surprising for others—so document the behavior and return predictable <code>429</code> + <code>Retry-After</code> when possible.
+          <strong>Token bucket</strong> refills continuously up to a capacity, so short bursts borrow from the bucket while long-run throughput tracks the refill rate.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Algorithm intuition</div>
+          <ul class="tight">
+            <li><strong>Fixed window:</strong> count requests per clock bucket; easy, but two bursts across the boundary can temporarily allow 2× the nominal rate.</li>
+            <li><strong>Token bucket:</strong> refill tokens continuously up to capacity; admits bursts up to capacity while bounding long-run rate to refill.</li>
+            <li><strong>Sliding log / sliding window:</strong> more accurate, higher memory cost—use for strict SLOs or billing.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Client-facing behavior</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Return <code>429</code> with <strong><code>Retry-After</code></strong> when you can predict recovery. Pair with <strong>jittered exponential backoff</strong> on clients to avoid synchronized retry storms after incidents.
+            Expose remaining quota and reset epoch in headers when you can (<code>RateLimit-*</code>, <code>X-RateLimit-*</code>, or similar vendor-specific shapes)—clients integrate faster when counters are inspectable.
+          </p>
+        </div>
+
+        <div class="callout-cyan">
+          The <a href="../visuals.html">animated explorer</a> now runs <strong>token bucket</strong> and <strong>fixed window</strong> together: match arrival sliders to compare how each algorithm spends budget under the same offered load, and watch the fixed-window histogram for seam stress.
+        </div>
+
+        <p class="chapter-nav">
+          <a href="../index.html">← Overview</a>
+          &nbsp;·&nbsp;
+          <a href="../visuals.html">Explorer (both limits) →</a>
+          &nbsp;·&nbsp;
+          <a href="caching.html">Caching →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

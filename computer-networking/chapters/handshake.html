@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handshake — NET LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · transport</p>
+        <h1>TCP handshake and retransmits</h1>
+        <p class="lead">
+          TCP establishes bidirectional state with <strong>SYN</strong>, <strong>SYN-ACK</strong>, <strong>ACK</strong>—three segments minimum before data (ignoring TFO). Loss on any segment triggers <strong>retransmission timers</strong> that interact with RTT estimates (RTO backoff).
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Why you feel it</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Microservices chatter and “one query per HTTP request” patterns multiply setup tax. <strong>Connection reuse</strong>, pooling, and TLS session resumption exist specifically to amortize this cost.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Retransmit intuition</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            The explorer’s packet stream slows with RTT and stutters with loss—mirroring the idea that goodput drops when ACKs are delayed or segments are missing. The explorer also shows a running <strong>retransmit event</strong> count and ties a toy <strong>cwnd</strong> to those drops.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">TCP 3-way (minimum)</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px; line-height: 1.6;">
+            Before application data, the client and server exchange three segments to agree on sequence state: <strong>SYN</strong>, <strong>SYN-ACK</strong>, <strong>ACK</strong>. That is at least one round trip of control-plane work (more with options, middleboxes, or loss).
+          </p>
+          <div class="bar-ci" style="margin-top: 0; height: 32px; position: relative;">
+            <span style="position: absolute; left: 8px; top: 8px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); z-index: 1;">client</span>
+            <span style="position: absolute; right: 8px; top: 8px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); z-index: 1;">server</span>
+            <div class="interval" style="left: 6%; width: 22%; top: 6px; bottom: 6px; background: rgba(90, 154, 110, 0.45); border-color: var(--success);">
+              <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-primary); white-space: nowrap;">SYN →</span>
+            </div>
+            <div class="interval" style="left: 38%; width: 24%; top: 6px; bottom: 6px; background: rgba(91, 163, 181, 0.35); border-color: var(--accent-cyan);">
+              <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-primary); white-space: nowrap;">← SYN-ACK</span>
+            </div>
+            <div class="interval" style="left: 72%; width: 22%; top: 6px; bottom: 6px; background: rgba(90, 154, 110, 0.45); border-color: var(--success);">
+              <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 10px; color: var(--text-primary); white-space: nowrap;">ACK →</span>
+            </div>
+          </div>
+          <p style="margin: 12px 0 0; font-size: 12px; color: var(--text-muted); font-family: var(--font-mono);">
+            Live strip (TCP bar vs 3-way lane, plus retransmit count): <a href="../visuals.html#explorer-metrics" style="color: var(--accent-coral);">Animated explorer</a>
+            · <a href="../visuals.html#explorer-retx" style="color: var(--accent-coral);">retransmit counter</a>
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="stack.html" style="color: var(--accent-coral);">← Stack</a>
+          &nbsp;·&nbsp;
+          <a href="congestion.html" style="color: var(--accent-coral);">Congestion →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

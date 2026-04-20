@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DNS &amp; TLS — NET LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · setup cost</p>
+        <h1>DNS and TLS latency</h1>
+        <p class="lead">
+          Before application bytes flow, the client usually pays for <strong>name resolution</strong>, <strong>TCP setup</strong>, and <strong>TLS handshakes</strong>. On short requests, that setup dominates time-to-first-byte.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">DNS</div>
+          <ul class="tight">
+            <li>Resolver cache hits are fast; cold lookups traverse NS chains and may add multiple RTTs.</li>
+            <li>Happy Eyeballs and IPv6/IPv4 fallbacks can add parallel connection attempts—good for reliability, noisy for benchmarks.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">TLS</div>
+          <ul class="tight">
+            <li>1-RTT vs 0-RTT resumption trades latency for careful replay policy.</li>
+            <li>Certificate validation and OCSP stapling quality affect tail latency more than median.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">See the stacked bars</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            The <a href="../visuals.html#explorer-metrics" style="color: var(--accent-coral);">animated explorer</a> stacks <strong>DNS</strong>, <strong>TCP</strong>, <strong>TLS</strong>, and <strong>request → TTFB</strong> as toy latency shares; the <strong>TCP 3-way</strong> row under the green TCP bar shows control-segment order, not another duration bar.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="congestion.html" style="color: var(--accent-coral);">← Congestion</a>
+          &nbsp;·&nbsp;
+          <a href="http.html" style="color: var(--accent-coral);">HTTP/2–3 →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

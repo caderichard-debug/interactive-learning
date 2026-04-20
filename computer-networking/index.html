@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer networking: latency, loss, and flow</title>
+  <meta name="description" content="Visual starters for packet timing, handshake cost, and congestion behavior." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 860px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Interactive education</p>
+        <h1>Computer networking: latency, loss, and flow</h1>
+        <p class="lead">Chapters and an explorer for how bytes move: layers, handshakes, congestion, secure setup, and HTTP evolution.</p>
+        <p>
+          <a class="btn-primary" href="visuals.html">Open animated explorer →</a>
+          <a class="btn-ghost" href="#topics">Topic map</a>
+        </p>
+        <h2 id="topics">Starter topics</h2>
+        <ol class="chapter-toc" style="padding: 0; margin: 0 0 28px;">
+          <li><a href="visuals.html"><span class="toc-num">01</span><span>Animated explorer</span></a></li>
+          <li><a href="chapters/stack.html"><span class="toc-num">02</span><span>Stack &amp; path</span></a></li>
+          <li><a href="chapters/handshake.html"><span class="toc-num">03</span><span>TCP handshake</span></a></li>
+          <li><a href="chapters/congestion.html"><span class="toc-num">04</span><span>Congestion</span></a></li>
+          <li><a href="chapters/dns-tls.html"><span class="toc-num">05</span><span>DNS &amp; TLS</span></a></li>
+          <li><a href="chapters/http.html"><span class="toc-num">06</span><span>HTTP/2–3</span></a></li>
+        </ol>
+        <div class="panel">
+          <div class="panel-label">Why this starter</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">Build intuition for where time goes before you optimize JSON—then validate with traces (Wireshark, browser devtools, distributed tracing).</p>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+</body>
+</html>

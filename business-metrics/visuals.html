@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated explorer — funnel, CAC/LTV, MRR bridge, cohort cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="max-width: 900px; margin: 0 auto; padding: 32px 40px 48px; width: 100%; flex: 1;">
+        <p class="eyebrow">Explorer</p>
+        <h1>Funnel, unit economics, MRR bridge, cohorts, runway</h1>
+        <p class="lead" style="color: var(--text-secondary); font-size: 15px;">
+          Sliders drive toy models: stage conversions, CAC and LTV from contribution and lifetime, a simplified MRR movement bridge, logo retention decay, and forward cash vs burn. For decisions, validate against finance-grade definitions.
+        </p>
+
+        <div class="panel" id="panel-funnel">
+          <div class="panel-label">Funnel (four stages)</div>
+          <div class="control-row"><label>Top-of-funnel volume <span id="v-vis">12000</span></label><input id="f-vis" type="range" min="2000" max="50000" step="500" value="12000" /></div>
+          <div class="control-row"><label>Stage A→B <span id="v-c1">42</span>%</label><input id="f-c1" type="range" min="5" max="95" value="42" /></div>
+          <div class="control-row"><label>Stage B→C <span id="v-c2">38</span>%</label><input id="f-c2" type="range" min="5" max="95" value="38" /></div>
+          <div class="control-row"><label>Stage C→D <span id="v-c3">55</span>%</label><input id="f-c3" type="range" min="5" max="95" value="55" /></div>
+          <div class="control-row"><label>Stage D→E <span id="v-c4">28</span>%</label><input id="f-c4" type="range" min="5" max="95" value="28" /></div>
+          <canvas id="viz-funnel" width="840" height="210" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-funnel"></div>
+        </div>
+
+        <div class="panel" id="panel-econ-ltv">
+          <div class="panel-label">CAC, LTV (toy), contribution, payback</div>
+          <div class="control-row"><label>CAC ($) <span id="v-cac">480</span></label><input id="e-cac" type="range" min="50" max="6000" step="10" value="480" /></div>
+          <div class="control-row"><label>Net new MRR / account ($/mo) <span id="v-mrr">95</span></label><input id="e-mrr" type="range" min="10" max="800" step="5" value="95" /></div>
+          <div class="control-row"><label>Gross margin <span id="v-mar">78</span>%</label><input id="e-mar" type="range" min="35" max="92" value="78" /></div>
+          <div class="control-row"><label>Expected paying lifetime (mo) <span id="v-life">28</span></label><input id="e-life" type="range" min="6" max="96" value="28" /></div>
+          <div class="control-row"><label>LTV stress: −<span id="v-ltvtrim">12</span> pts gross margin</label><input id="e-ltvtrim" type="range" min="0" max="35" value="12" /></div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin: 0 0 8px;">
+            LTV here is undiscounted: monthly contribution × lifetime. The stress slider lowers <strong>margin only</strong> for a downside LTV (churn, discounting, support load)—not payback, which still uses headline margin. Pair with the <a href="#panel-mrr-bridge" style="color: var(--accent-coral);">MRR bridge</a> for within-account expansion.
+          </p>
+          <canvas id="viz-econ" width="840" height="200" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-econ"></div>
+        </div>
+
+        <div class="panel" id="panel-mrr-bridge">
+          <div class="panel-label">MRR movement bridge (period deltas, $k)</div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin: 0 0 8px;">
+            Net MRR change = new + expansion − contraction − churn. Starting ARR is a scale anchor only; bars show one month’s motion on a shared vertical scale.
+          </p>
+          <div class="control-row"><label>Starting MRR ($k) <span id="v-m0">8000</span></label><input id="m-m0" type="range" min="500" max="20000" step="100" value="8000" /></div>
+          <div class="control-row"><label>New MRR ($k) <span id="v-mn">120</span></label><input id="m-new" type="range" min="0" max="800" step="10" value="120" /></div>
+          <div class="control-row"><label>Expansion ($k) <span id="v-me">180</span></label><input id="m-exp" type="range" min="0" max="800" step="10" value="180" /></div>
+          <div class="control-row"><label>Contraction ($k) <span id="v-mc">60</span></label><input id="m-cont" type="range" min="0" max="800" step="10" value="60" /></div>
+          <div class="control-row"><label>Churn MRR ($k) <span id="v-mch">150</span></label><input id="m-churn" type="range" min="0" max="800" step="10" value="150" /></div>
+          <canvas id="viz-mrr" width="840" height="220" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-mrr"></div>
+        </div>
+
+        <div class="panel" id="panel-cohort-runway">
+          <div class="panel-label">Cohort retention + forward cash</div>
+          <div class="control-row"><label>Monthly logo retention <span id="v-ret">92</span>%</label><input id="c-ret" type="range" min="70" max="99" value="92" /></div>
+          <div class="control-row"><label>Monthly $ retention (revenue cohort) <span id="v-revm">88</span>%</label><input id="c-revm" type="range" min="65" max="99" value="88" /></div>
+          <p style="color: var(--text-secondary); font-size: 12px; margin: -4px 0 8px;">
+            When $ retention runs above logos, you are modeling <strong>net expansion in cohort revenue</strong> (NRR-style); below logos, revenue is falling faster than account count.
+          </p>
+          <div class="control-row"><label>Cash on hand ($k) <span id="v-cash">4200</span></label><input id="r-cash" type="range" min="300" max="20000" step="100" value="4200" /></div>
+          <div class="control-row"><label>Monthly burn ($k) <span id="v-burn">580</span></label><input id="r-burn" type="range" min="50" max="4000" step="10" value="580" /></div>
+          <canvas id="viz-cohort" width="840" height="280" style="width:100%;height:auto;border:1px solid var(--grid-line);border-radius:10px;background:var(--surface-elevated);"></canvas>
+          <div class="readout" id="readout-runway"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Defaults to argue from</div>
+          <ul class="tight" style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            <li>Define <strong>active</strong> and <strong>paid</strong> cohorts separately—logo churn and revenue churn diverge.</li>
+            <li>Payback and toy LTV use <strong>contribution margin</strong>, not revenue; include services load if material.</li>
+            <li>Forward cash here is linear burn only—stress-test <strong>hiring plans</strong>, <strong>collection lag</strong>, and revenue timing in your real model.</li>
+          </ul>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="layout.js" defer></script>
+  <script src="visuals.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Partitions — DS Lab</title>
+  <meta name="description" content="Network splits, split brain, quorums, and fencing at a high level." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · faults</p>
+        <h1>Partitions</h1>
+        <p class="lead">
+          A <strong>partition</strong> cuts communication between subsets of nodes. Each side may still run and accept work. Without rules, you risk <strong>split brain</strong>—two leaders, conflicting writes, and merges that are expensive or impossible to automate safely.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Mitigations (names, not recipes)</div>
+          <table class="data" aria-label="Partition patterns">
+            <thead>
+              <tr>
+                <th>Idea</th>
+                <th>What it buys</th>
+                <th>Cost / caveat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Quorum writes/reads</td>
+                <td>Majority intersection guarantees you talk to someone who saw recent state.</td>
+                <td>Latency; minority side may be unavailable for strict quorums.</td>
+              </tr>
+              <tr>
+                <td>Leader + lease</td>
+                <td>Serializes decisions for a window of time.</td>
+                <td>Clock skew and lease length trade off safety vs liveness.</td>
+              </tr>
+              <tr>
+                <td>Fencing token</td>
+                <td>Stale leader’s writes lose to storage that remembers the higher epoch.</td>
+                <td>Storage must enforce; not all layers participate.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+          <strong>Quorum vs partition:</strong> the reachable set after a cut is a <em>topology</em> fact; quorum size is a <em>policy</em> on <strong>N</strong>. Compare the two sliders in <a href="../visuals.html#explorer-partition" style="color: var(--accent-primary);">sketch 1</a> on the <a href="../visuals.html" style="color: var(--accent-primary);">Animated explorer</a> before <a href="consensus-intro.html" style="color: var(--accent-primary);">Consensus sketch</a>.
+        </p>
+
+        <p style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between;">
+          <a href="timeouts.html" style="color: var(--accent-coral);">← Timeouts &amp; retries</a>
+          <a href="eventual-consistency.html" style="color: var(--accent-coral);">Next: Eventual consistency →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

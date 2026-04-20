@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Versioning — API LAB</title>
+  <meta name="description" content="Additive evolution, deprecation windows, and contract tests for API consumers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Topic 02 · compatibility</p>
+        <h1>Versioning and compatibility</h1>
+        <p class="lead">
+          APIs live longer than any single client. The sustainable default is <strong>additive change first</strong>: new optional fields, new endpoints, and conservative defaults—then explicit deprecation with timeboxed sunsets.
+        </p>
+
+        <h2>Additive-first discipline</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 20px;">
+          Prefer changes consumers can ignore: optional fields, expanded enums with safe fallbacks, and new resources instead of semantic rewrites.
+          When you must break, ship a parallel surface (<code>/v2</code> or a new resource) and migrate traffic with metrics on old vs new paths—see <a href="rest-graphql.html">REST vs GraphQL</a> for how schema registries change the playbook.
+        </p>
+
+        <h2>Deprecation windows</h2>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+          Publish a calendar date, log usage by consumer key, and send staged warnings (headers, docs, email for partners).
+          Pair contract tests with traffic dashboards so you retire fields only when usage crosses a safe threshold.
+          In GraphQL registries, <code>@deprecated</code> plus field analytics gives concrete removal signals; in OpenAPI, mark fields deprecated with a sunset note in the description or extension fields.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Patterns</div>
+          <table class="data" aria-label="Versioning patterns">
+            <thead>
+              <tr>
+                <th>Approach</th>
+                <th>When it shines</th>
+                <th>Watch out</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>URL prefix (<code>/v2/</code>)</td>
+                <td>Clear routing, easy docs and analytics split.</td>
+                <td>Proliferation of duplicate handlers if not generated from one spec.</td>
+              </tr>
+              <tr>
+                <td>Header negotiation</td>
+                <td>Stable URLs; good for incremental media types.</td>
+                <td>Caches and intermediaries must vary correctly on headers.</td>
+              </tr>
+              <tr>
+                <td>Schema registries (protobuf, Avro)</td>
+                <td>Strong contracts for internal high-throughput services.</td>
+                <td>Consumer upgrade coordination; compatibility matrices.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Contract tests</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Capture <strong>consumer-driven contracts</strong> or golden fixtures for critical clients. Break the build when a server change violates agreed JSON shapes or OpenAPI examples—before traffic shifts.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Production defaults</div>
+          <ul class="tight">
+            <li>Never remove a field without a deprecation header, doc notice, and a dated sunset.</li>
+            <li>Generate server stubs and client SDKs from the same OpenAPI/proto source where possible.</li>
+            <li>Alert on rising <code>4xx</code> after releases—often the first signal of a compatibility miss.</li>
+          </ul>
+        </div>
+
+        <p class="chapter-nav">
+          <a href="../index.html">← Overview</a>
+          &nbsp;·&nbsp;
+          <a href="../visuals.html">Animated explorer</a>
+          &nbsp;·&nbsp;
+          <a href="rest-graphql.html">← REST vs GraphQL</a>
+          &nbsp;·&nbsp;
+          <a href="rate-limits.html">Rate limits →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

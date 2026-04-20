@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stack &amp; path — NET LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · layering</p>
+        <h1>Packet path across the stack</h1>
+        <p class="lead">
+          Each layer solves a different problem: <strong>link</strong> moves frames on a segment, <strong>network</strong> routes between hosts, <strong>transport</strong> multiplexes and repairs streams, <strong>application</strong> interprets bytes as protocol messages.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Why layers matter for debugging</div>
+          <ul class="tight">
+            <li>Symptoms at the UI may originate in DNS, TLS cert chains, MTU black holes, or app-level head-of-line blocking.</li>
+            <li>Observability needs <strong>correlation IDs</strong> that survive hops—pure packet dumps rarely tell the product story alone.</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Mental model</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.6;">
+            Think of a request as a stack of envelopes: each layer adds headers for its peer on the other host. Peeling envelopes from the wire upward is how parsers recover HTTP from TCP segments from IP packets from Ethernet frames.
+          </p>
+        </div>
+
+        <p style="margin: 20px 0 0; font-size: 13px; color: var(--text-muted);">
+          See layers collapse into timings on one canvas: <a href="../visuals.html#explorer-metrics" style="color: var(--accent-coral);">setup bars + stream metrics</a>.
+        </p>
+
+        <p style="margin-top: 28px;">
+          <a href="../visuals.html" style="color: var(--accent-coral);">Explorer →</a>
+          &nbsp;·&nbsp;
+          <a href="handshake.html" style="color: var(--accent-coral);">TCP handshake →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

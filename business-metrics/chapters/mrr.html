@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MRR composition — METRICS LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <div id="sidebar-host"></div>
+    <div class="main-scroll">
+      <main style="padding: 32px 40px 48px; max-width: 760px; margin: 0 auto; width: 100%; flex: 1;">
+        <p class="eyebrow">Chapter · revenue motion</p>
+        <h1>MRR composition</h1>
+        <p class="lead">
+          Net MRR movement is the sum of <strong>new</strong>, <strong>expansion</strong>, <strong>contraction</strong>, and <strong>churn</strong>.
+          Growth quality depends on whether expansion outruns churn—not on new logo hero numbers alone.
+        </p>
+
+        <div class="panel">
+          <div class="panel-label">Animated bridge in the explorer</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 12px;">
+            The <a href="../visuals.html#panel-mrr-bridge" style="color: var(--accent-coral);">animated explorer</a> sketches one month of MRR movement from sliders—useful for rehearsing sign conventions before you trust a finance export.
+          </p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Bridge (simplified)</div>
+          <table class="data" aria-label="MRR bridge">
+            <thead>
+              <tr>
+                <th>Bucket</th>
+                <th>What moves it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>New</td>
+                <td>First-time paying customers in period.</td>
+              </tr>
+              <tr>
+                <td>Expansion</td>
+                <td>Seats, usage tiers, cross-sell—same customer pays more.</td>
+              </tr>
+              <tr>
+                <td>Contraction</td>
+                <td>Downgrades before churn; often an early warning.</td>
+              </tr>
+              <tr>
+                <td>Churn</td>
+                <td>Logo or revenue leaves; track both when usage-based.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Reading the health signal</div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">
+            If new MRR masks weak expansion and rising contraction, efficiency metrics like magic number and payback can still look fine—until they do not. Pair MRR bridges with cohort charts.
+          </p>
+        </div>
+
+        <p style="margin-top: 28px;">
+          <a href="../visuals.html#panel-mrr-bridge" style="color: var(--accent-coral);">Explorer: MRR bridge</a>
+          &nbsp;·&nbsp;
+          <a href="retention.html" style="color: var(--accent-coral);">← Retention</a>
+          &nbsp;·&nbsp;
+          <a href="runway.html" style="color: var(--accent-coral);">Runway →</a>
+        </p>
+      </main>
+    </div>
+  </div>
+  <script src="../layout.js" defer></script>
+</body>
+</html>

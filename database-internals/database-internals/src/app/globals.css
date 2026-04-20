@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* BrrrViz Design System - Dark First Theme */
+
+:root {
+  /* Background Colors - Dark First */
+  --bg: #21201e;                    /* Main background - dark charcoal */
+  --surface: #21201e;               /* Surface elements */
+  --surface-elevated: #1a1918;      /* Elevated surfaces - slightly darker */
+  --grid-line: #333333;            /* Grid lines and borders */
+  --visual-box: #1a1918;           /* Visualization containers */
+
+  /* Primary Accents - CORAL (not blue!) */
+  --accent-coral: #e07060;         /* PRIMARY CTA COLOR - The key BrrrViz color */
+  --accent-coral-bright: #ef8070;  /* Bright coral for hover states */
+  --accent-coral-mid: #c95a4a;     /* Mid-tone coral */
+  --accent-coral-muted: #9d5a52;   /* Muted coral for subtle elements */
+
+  /* Secondary Accents */
+  --accent-cyan: #5ba3b5;          /* Cyan accent for visualizations */
+  --accent-violet: #8b7aa8;        /* Violet accent for special elements */
+  --accent-primary: #4a6b8a;       /* Primary blue (used sparingly) */
+  --accent-primary-bright: #6b8fad;
+
+  /* Semantic Colors */
+  --success: #5a9a6e;              /* Green for success states */
+  --warning: #c9a86c;              /* Amber for warnings */
+  --danger: #c75a5a;               /* Red for errors */
+
+  /* Typography */
+  --text-primary: #e7e5e2;         /* High contrast text - off-white */
+  --text-secondary: #888888;       /* Muted text - gray */
+  --text-muted: #666666;           /* Very muted text */
+
+  /* Navigation */
+  --sidebar-width: 220px;          /* Full sidebar width */
+  --sidebar-collapsed: 48px;       /* Collapsed state */
+  --mobile-rail-width: 52px;       /* Mobile navigation */
+
+  /* Interactive States */
+  --hover-overlay: rgba(231, 229, 226, .05);     /* Very subtle hover - barely visible */
+  --active-overlay: rgba(224, 112, 96, .08);     /* Coral-tinted active state */
+
+  /* Font Families */
+  --font-display: var(--font-inter);             /* Headlines, UI elements */
+  --font-body: var(--font-inter);                /* Body text */
+  --font-mono: var(--font-jetbrains-mono);       /* Code, technical labels */
+}
+
+@theme inline {
+  /* Map BrrrViz colors to Tailwind */
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-grid-line: var(--grid-line);
+  --color-visual-box: var(--visual-box);
+
+  --color-accent-coral: var(--accent-coral);
+  --color-accent-coral-bright: var(--accent-coral-bright);
+  --color-accent-coral-mid: var(--accent-coral-mid);
+  --color-accent-coral-muted: var(--accent-coral-muted);
+
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-violet: var(--accent-violet);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100%;
+  width: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(224, 112, 96, 0.25); /* Coral with low opacity */
+  color: var(--accent-coral-bright);
+}
+
+/* Custom scrollbar styling - match BrrrViz */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grid-line);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Focus states for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-coral);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+*,
+*:before,
+*:after {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Remove transition for properties that shouldn't transition */
+*:not(a):not(button):not([role="button"]) {
+  transition: none;
+}
+
+/* Link styling */
+a {
+  color: var(--accent-coral);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent-coral-bright);
+}
+
+/* Button styling - BrrrViz style */
+button {
+  font-family: var(--font-display);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Input styling */
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--grid-line);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-coral);
+}
+
+/* Code styling */
+code,
+pre {
+  font-family: var(--font-mono);
+  background: var(--surface-elevated);
+  border-radius: 4px;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: 12px;
+  overflow-x: auto;
+}
+
+/* Image styling */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Utility classes */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.bg-surface {
+  background: var(--surface);
+}
+
+.bg-surface-elevated {
+  background: var(--surface-elevated);
+}
+
+/* BrrrViz-specific utility classes */
+.hover-overlay {
+  transition: background-color 0.15s ease;
+}
+
+.hover-overlay:hover {
+  background: var(--hover-overlay);
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --grid-line: #555555;
+    --text-secondary: #aaaaaa;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
