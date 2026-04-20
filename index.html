@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learning topics — interactive educational platform</title>
+  <meta name="description" content="Index of hands-on learning sites: quant trading, ML visualizations, distributed systems, API design, business metrics, and computer networking." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Interactive educational platform</p>
+    <h1>Learning topics</h1>
+    <p class="lead">
+      Pick a topic: <strong>Quant trading lab</strong>, <strong>ML visualizations</strong>, <strong>Distributed systems</strong>, <strong>API design</strong>, <strong>Business metrics</strong>, or <strong>Computer networking</strong>—all on this site; source is on GitHub.
+    </p>
+
+    <div class="cards">
+      <a class="card" href="/quant-trading/index.html">
+        <h2>Quant trading lab</h2>
+        <p>Static chapters: sampling (Wilson bands), returns &amp; series, costs, backtest hygiene, signals, risk &amp; sizing. Sidebar loads over HTTP; paths work under a repo prefix.</p>
+        <div class="go">Open quant site →</div>
+      </a>
+
+      <a class="card" href="/interactive-learning/ml-visualizations/">
+        <h2>ML visualizations</h2>
+        <p>Convolutions, loss curves, softmax and temperature, regularization, encoder–decoder, residuals, normalization—each chapter is built to drag, click, and compare, not only read.</p>
+        <div class="go">Open ML site →</div>
+      </a>
+
+      <a class="card" href="/distributed-systems/index.html">
+        <h2>Distributed systems</h2>
+        <p>CAP and partitions, timeouts and retries, eventual consistency, and a consensus sketch—static chapters with the same sidebar shell as the quant lab.</p>
+        <div class="go">Open distributed systems →</div>
+      </a>
+    
+
+      <a class="card" href="/api-design/index.html">
+        <h2>API design</h2>
+        <p>Contract-first API topics with animated limit and latency explorer panels.</p>
+        <div class="go">Open API design →</div>
+      </a>
+
+      <a class="card" href="/business-metrics/index.html">
+        <h2>Business metrics</h2>
+        <p>Interactive starter for funnel leakage, CAC/LTV sensitivity, and runway trade-offs.</p>
+        <div class="go">Open business metrics →</div>
+      </a>
+
+      <a class="card" href="/computer-networking/index.html">
+        <h2>Computer networking</h2>
+        <p>Packet timing, handshake overhead, and congestion intuition with animated controls.</p>
+        <div class="go">Open networking →</div>
+      </a>
+</div>
+
+    <h2 class="h2-resources">Shared guides</h2>
+    <ul class="resources">
+      <li><a href="https://github.com/caderichard-debug/interactive-learning/blob/main/interactive-educational-platform/STYLE-GUIDE.md">STYLE-GUIDE.md</a> — layout, color, typography.</li>
+      <li><a href="https://github.com/caderichard-debug/interactive-learning/blob/main/interactive-educational-platform/CONTENT-AND-RESEARCH-GUIDE.md">CONTENT-AND-RESEARCH-GUIDE.md</a> — pedagogy and research handoff.</li>
+      <li><a href="https://github.com/caderichard-debug/interactive-learning/tree/main/topic-site-agent">topic-site-agent</a> — CLI for generating static topic sites.</li>
+    </ul>
+
+    <footer>
+      Local preview: from the repo root run <code>npm install</code> once if needed, then <code>npm run learning-hub</code> and open <code>http://127.0.0.1:3000/</code> (regenerates <code>learning-hub-static/</code> each run).
+    </footer>
+  </div>
+</body>
+</html>
